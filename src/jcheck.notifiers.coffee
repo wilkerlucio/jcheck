@@ -37,12 +37,19 @@
 			dialog.html(html)
 	
 	class $.FormCheck.Notifiers.NotificationDialog extends $.FormCheck.Notifiers.DialogBase
+		constructor: (form, options) ->
+			super form
+			@options: $.extend({
+				autoclose_in: 4000
+			}, options || {})
+		
 		notify: () ->
 			dialog: @generate_dialog()
 			dialog.css({left: "-1000px", top: "-1000px"})
 			@populate_dialog(dialog, @form.errors.full_messages())
 			dialog.css({top: "-${dialog.outerHeight()}px", left: "50%", "margin-left": "-${Math.round(dialog.outerWidth() / 2)}px"})
 			dialog.animate({top: "0px"})
+			dialog.mouseout()
 		
 		close_dialog: ->
 			dialog: @generate_dialog()
@@ -59,6 +66,16 @@
 				
 				dialog.click =>
 					@close_dialog()
+				
+				if @options.autoclose_in
+					dialog.mouseover =>
+						clearInterval(@close_timer) if @close_timer
+				
+					dialog.mouseout =>
+						self: this
+						callback: () ->
+							self.close_dialog()
+						@close_timer: setTimeout(callback, @options.autoclose_in)
 				
 				$(document.body).append(dialog)
 			else
