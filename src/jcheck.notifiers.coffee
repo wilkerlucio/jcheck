@@ -55,7 +55,7 @@
 			if $("#${dialog_id}").length == 0
 				dialog: $(document.createElement("div"))
 				dialog.attr("id", dialog_id)
-				dialog.css({position: "absolute"})
+				dialog.css({position: "fixed"})
 				
 				dialog.click =>
 					@close_dialog()
