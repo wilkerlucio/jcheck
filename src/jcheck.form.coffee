@@ -57,8 +57,15 @@
 			notifier[callback](attribute, event) for notifier in @live_notifiers
 		
 		setup_notifiers: ->
-			@notifiers = new ($.FormCheck.find_notifier(kind))(this) for kind in @options.notifiers
-			@live_notifiers = new ($.FormCheck.find_notifier(kind))(this) for kind in @options.live_notifiers if @options.live_notifiers
+			for type in ["notifiers", "live_notifiers"]
+				this[type]: []
+				this[type]: @get_notifier(kind) for kind in @options[type] if @options[type]
+		
+		get_notifier: (notifier) ->
+			if $.isString(notifier)
+				new ($.FormCheck.find_notifier(notifier))(this)
+			else
+				notifier
 		
 		validate: (validator) ->
 			@validations.push(validator)
