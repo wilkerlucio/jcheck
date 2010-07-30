@@ -84,18 +84,23 @@
 			
 			element: @form.field(attribute).element
 			offset: element.offset()
-			dialog.messages: messages
 			
 			if messages.length > 0
-				dialog.css({left: "-1000px", top: "-1000px"})
-				dialog.hide()
+				if dialog.messages and dialog.messages.length > 0
+					@populate_dialog(dialog, messages)
+					dialog.css({top: "${offset.top - dialog.outerHeight()}px", left: "${offset.left + element.outerWidth()}px"})
+				else
+					dialog.css({left: "-1000px", top: "-1000px"})
+					dialog.hide()
 				
-				@populate_dialog(dialog, messages)
+					@populate_dialog(dialog, messages)
 				
-				dialog.css({top: "${offset.top - dialog.outerHeight()}px", left: "${offset.left + element.outerWidth()}px"})
-				dialog.fadeIn("fast")
+					dialog.css({top: "${offset.top - dialog.outerHeight()}px", left: "${offset.left + element.outerWidth()}px"})
+					dialog.fadeIn("fast")
 			else
 				@close_dialog(attribute)
+			
+			dialog.messages: messages
 		
 		blur: (attribute) ->
 			@close_dialog(attribute)
