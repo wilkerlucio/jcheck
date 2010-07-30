@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>jCheck</title>
+		<link rel="stylesheet" type="text/css" href="../css/jcheck.css" />
+		<script type="text/javascript" src="../vendor/jquery.js"></script>
+		<script type="text/javascript" src="../lib/jcheck.core-extensions.js"></script>
+		<script type="text/javascript" src="../lib/jcheck.form.js"></script>
+		<script type="text/javascript" src="../lib/jcheck.errors.js"></script>
+		<script type="text/javascript" src="../lib/jcheck.notifiers.js"></script>
+		<script type="text/javascript" src="../lib/jcheck.validations.js"></script>
+		<script type="text/javascript" src="../lib/jcheck.i18n.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				var v = $("form.comment").jcheck({field_prefix: "comment"});
+				
+				with (v) {
+					validates("username", "email", "message", {presence: true});
+					validates_length_of("username", {minimum: 3, maximum: 10});
+					validates_numericality_of("number", {greater_than: 5, only_integer: true});
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<h2>Post your comment</h2>
+		<form action="" method="post" class="simple_form comment">
+			<div class="input string required">
+				<label class="string required" for="comment_username">Your name</label>
+				<input class="string required" id="comment_username" maxlength="255" name="comment[username]" size="50" type="text" />
+			</div>
+			<div class="input string required">
+				<label class="string required" for="comment_email">Your e-mail</label>
+				<input class="string required" id="comment_email" maxlength="255" name="comment[email]" size="50" type="text" />
+			</div>
+			<div class="input string required">
+				<label class="string required" for="comment_number">Some number</label>
+				<input class="string required" id="comment_number" maxlength="255" name="comment[number]" size="50" type="text" />
+			</div>
+			<div class="input string required">
+				<label class="string required" for="comment_message">Your comment</label>
+				<textarea id="comment_message" name="comment[message]" cols="30" rows="10"></textarea>
+			</div>
+			<button type="submit">Send</button>
+		</form>
+	</body>
+</html>
