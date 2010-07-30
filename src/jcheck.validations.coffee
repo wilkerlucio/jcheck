@@ -96,12 +96,21 @@
 	# format validator
 	##################################
 	class $.FormCheck.Validations.FormatValidator extends $.FormCheck.EachValidator
+		constructor: (options) ->
+			for opt in ["with", "without"]
+				options[opt] = $.FormCheck.Validations.FormatValidator.FORMATS[options[opt]] if options[opt]? and $.isString(options[opt])
+			
+			super options
+		
 		validate_each: (form, attribute, value) ->
 			if @options["with"] and !((value + "").match(@options["with"]))
 				form.errors.add(attribute, ":invalid", $.extend(object_without_properties(@options, ['with']), {value: value}))
 			if @options["without"] and (value + "").match(@options["without"])
 				form.errors.add(attribute, ":invalid", $.extend(object_without_properties(@options, ['without']), {value: value}))
 	
+	$.FormCheck.Validations.FormatValidator.FORMATS: {
+		email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
+	}
 	$.FormCheck.Validations.FormatValidator.kind: "format"
 	
 	$.FormCheck::validates_format_of: (attributes...) ->

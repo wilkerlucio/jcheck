@@ -17,6 +17,7 @@
 				
 				with (v) {
 					validates("username", "email", "message", {presence: true});
+					validates("email", {format: {"with": "email"}});
 					validates_length_of("username", {minimum: 3, maximum: 10});
 					validates_numericality_of("number", {greater_than: 5, only_integer: true});
 				}
