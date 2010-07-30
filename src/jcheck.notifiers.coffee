@@ -19,19 +19,36 @@
 		for name, notifier of $.FormCheck.Notifiers
 			return notifier if notifier.kind == kind
 	
-	class $.FormCheck.Notifiers.NotificationDialog
-		notify: (form) ->
-			dialog: @generate_dialog(form)
+	class $.FormCheck.Notifiers.Base
+		constructor: (form) ->
+			@form: form
+		
+		focus: (attribute) ->
+		notify: (attribute) ->
+		blur: (attribute) ->
+	
+	class $.FormCheck.Notifiers.DialogBase extends $.FormCheck.Notifiers.Base
+		populate_dialog: (dialog, messages) ->
+			html: "<ul>"
+			for m in messages
+				html += "<li>* ${m}</li>"
+			html += "</ul>"
+			
+			dialog.html(html)
+	
+	class $.FormCheck.Notifiers.NotificationDialog extends $.FormCheck.Notifiers.DialogBase
+		notify: () ->
+			dialog: @generate_dialog()
 			dialog.css({left: "-1000px", top: "-1000px"})
-			@populate_dialog(dialog, form.errors.full_messages())
+			@populate_dialog(dialog, @form.errors.full_messages())
 			dialog.css({top: "-${dialog.outerHeight()}px", left: "50%", "margin-left": "-${Math.round(dialog.outerWidth() / 2)}px"})
 			dialog.animate({top: "0px"})
 		
 		close_dialog: ->
 			dialog: @generate_dialog()
-			dialog.animate({top: "-${dialog.outerHeight()}px"})
+			dialog.animate({top: "-${dialog.outerHeight() + 10}px"})
 		
-		generate_dialog: (form) ->
+		generate_dialog: () ->
 			dialog_id: "jcheck-error-dialog"
 			dialog: null
 			
@@ -40,22 +57,98 @@
 				dialog.attr("id", dialog_id)
 				dialog.css({position: "absolute"})
 				
+				dialog.click =>
+					@close_dialog()
+				
 				$(document.body).append(dialog)
 			else
 				dialog: $("#${dialog_id}")
 			
 			dialog
-		
-		populate_dialog: (dialog, messages) ->
-			html: "<ul>"
-			for m in messages
-				html += "<li>${m}</li>"
-			html += "</ul>"
-			
-			dialog.html(html)
-			
-			dialog.click =>
-				@close_dialog()
 	
 	$.FormCheck.Notifiers.NotificationDialog.kind = "notification_dialog"
+	
+	class $.FormCheck.Notifiers.TipBallons extends $.FormCheck.Notifiers.DialogBase
+		constructor: (form) ->
+			super form
+			@ballons: {}
+		
+		focus: (attribute) ->
+			@notify(attribute)
+		
+		notify: (attribute) ->
+			dialog: @dialog_for_attribute(attribute)
+			messages: @form.errors.on(attribute)
+			
+			return if messages.isEqual(dialog.messages)
+			
+			element: @form.field(attribute).element
+			offset: element.offset()
+			dialog.messages: messages
+			
+			if messages.length > 0
+				dialog.css({left: "-1000px", top: "-1000px"})
+				dialog.hide()
+				
+				@populate_dialog(dialog, messages)
+				
+				dialog.css({top: "${offset.top - dialog.outerHeight()}px", left: "${offset.left + element.outerWidth()}px"})
+				dialog.fadeIn("fast")
+			else
+				@close_dialog(attribute)
+		
+		blur: (attribute) ->
+			@close_dialog(attribute)
+		
+		dialog_for_attribute: (attribute) ->
+			@ballons[attribute]: @generate_dialog() unless @ballons[attribute]
+			@ballons[attribute]
+		
+		close_dialog: (attribute) ->
+			dialog: @dialog_for_attribute(attribute)
+			dialog.messages: null
+			dialog.fadeOut("fast")
+		
+		generate_dialog: () ->
+			dialog: null
+			
+			dialog: $(document.createElement("div"))
+			dialog.addClass("jcheck-inline-ballon-tip")
+			dialog.css({position: "absolute"})
+			
+			content_area: $(document.createElement("div"))
+			content_area.addClass("content")
+			dialog.append(content_area)
+			
+			arrow: @generate_arrow()
+			dialog.append(arrow)
+			
+			$(document.body).append(dialog)
+			
+			dialog
+		
+		generate_arrow: () ->
+			i: 10
+			container: $(document.createElement("div"))
+			container.addClass("arrow-container")
+			center: i / 2
+			max_width: null
+			
+			while i > 0
+				x: i * 2 - center
+				x: center + x - 1 if x < 0
+				
+				line: $(document.createElement("div"))
+				line.addClass("line${i}")
+				line.css({'font-size': 0, width: "${x}px", height: "1px", margin: "0 auto"})
+				
+				container.append(line)
+				i -= 1
+			
+			container
+		
+		populate_dialog: (dialog, messages) ->
+			super dialog.find(".content"), messages
+	
+	$.FormCheck.Notifiers.TipBallons.kind = "tip_ballons"
 )(jQuery)

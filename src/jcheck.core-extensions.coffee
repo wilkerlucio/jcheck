@@ -25,6 +25,15 @@
 		else
 			{}
 	
+	Array::isEqual: (other) ->
+		return false unless $.isArray(other)
+		return false if @length != other.length
+		
+		for value, key in this
+			return false if value != other[key]
+		
+		true
+	
 	String::simple_template_replace: (options) ->
 		text: this + ""
 		

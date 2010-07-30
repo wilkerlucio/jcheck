@@ -34,8 +34,8 @@
 			@errors[field].push(message)
 		
 		on: (attribute) ->
-			@errors[field] ?= []
-			@errors[field]
+			@errors[attribute] ?= []
+			@errors[attribute]
 		
 		each: (fn) ->
 			for attribute, errors of @errors

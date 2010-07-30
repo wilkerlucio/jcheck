@@ -20,6 +20,7 @@
 				prevent_submit: true
 				field_prefix: null
 				notifiers: ["notification_dialog"]
+				live_notifiers: ["tip_ballons"]
 				language: 'en'
 			}, options || {})
 			
@@ -33,16 +34,37 @@
 			@form.submit (e) =>
 				unless @is_valid()
 					e.preventDefault() if @options.prevent_submit
-					notifier.notify(this) for notifier in @notifiers
+					notifier.notify() for notifier in @notifiers
+			
+			if @options.live_notifiers
+				self: this
+				
+				@form.find(":input").focus (e) ->
+					name: self.parse_field_name($(this))
+					
+					if name
+						self.is_valid()
+						self.dispatch_live_notifiers("focus", name, e)
+
+				@form.find(":input").blur (e) ->
+					name: self.parse_field_name($(this))
+
+					if name
+						self.is_valid()
+						self.dispatch_live_notifiers("blur", name, e)
+		
+		dispatch_live_notifiers: (callback, attribute, event) ->
+			notifier[callback](attribute, event) for notifier in @live_notifiers
 		
 		setup_notifiers: ->
-			@notifiers = new ($.FormCheck.find_notifier(kind))() for kind in @options.notifiers
+			@notifiers = new ($.FormCheck.find_notifier(kind))(this) for kind in @options.notifiers
+			@live_notifiers = new ($.FormCheck.find_notifier(kind))(this) for kind in @options.live_notifiers if @options.live_notifiers
 		
 		validate: (validator) ->
 			@validations.push(validator)
 		
 		field: (name) ->
-			@field_cache[name] ?= new $.FormCheck.Field(this, @field_name(name))
+			@field_cache[name] ?= new $.FormCheck.Field(this, @field_name(name), name)
 			@field_cache[name]
 		
 		is_valid: ->
@@ -53,6 +75,16 @@
 			
 			@errors.size() == 0
 		
+		parse_field_name: (input) ->
+			name: input.attr("name")
+			return null unless name
+			
+			if @options.field_prefix
+				if matches = name.match(new RegExp("${@options.field_prefix}\\[(.+?)\\]"))
+					name: matches[1]
+			
+			name
+		
 		field_name: (name) ->
 			if @options.field_prefix
 				"${@options.field_prefix}[${name}]"
@@ -60,10 +92,16 @@
 				name
 	
 	class $.FormCheck.Field
-		constructor: (form, name) ->
+		constructor: (form, name, attribute) ->
 			@form_checker: form
 			@field_name: name
+			@attribute: attribute
 			@element: @form_checker.form.find("*[name='${name}']")
+			
+			if @form_checker.options.live_notifiers
+				@element.keyup (e) ->
+					form.is_valid()
+					form.dispatch_live_notifiers("notify", attribute, e)
 		
 		value: ->
 			@element.val()
