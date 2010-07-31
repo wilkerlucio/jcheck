@@ -16,7 +16,7 @@
 				var v = $("form.comment").jcheck({field_prefix: "comment"});
 				
 				with (v) {
-					validates("username", "message", {presence: true});
+					validates("username", "message", "genre", {presence: true});
 					validates("email", {format: {"with": "email", message: "is not a valid e-mail"}});
 					validates_length_of("username", {minimum: 3, maximum: 10});
 					validates_numericality_of("number", {greater_than: 5, only_integer: true, allow_blank: true});
@@ -42,6 +42,12 @@
 			<div class="input string required">
 				<label class="string required" for="comment_message">Your comment</label>
 				<textarea id="comment_message" name="comment[message]" cols="30" rows="10"></textarea>
+			</div>
+			<div class="input string required">
+				<input id="comment_genre_male" name="comment[genre]" type="radio" value="male" />
+			  <label class="collection_radio" for="comment_genre_male">Male</label>
+				<input id="comment_genre_female" name="comment[genre]" type="radio" value="female" />
+			  <label class="collection_radio" for="comment_genre_female">Female</label>
 			</div>
 			<button type="submit">Send</button>
 		</form>

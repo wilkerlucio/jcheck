@@ -103,7 +103,7 @@
 			@form_checker: form
 			@field_name: name
 			@attribute: attribute
-			@element: @form_checker.form.find("*[name='${name}']")
+			@element: @form_checker.form.find(":input[name='${name}']")
 			
 			if @form_checker.options.live_notifiers
 				@element.keyup (e) ->
@@ -111,7 +111,16 @@
 					form.dispatch_live_notifiers("notify", attribute, e)
 		
 		value: ->
-			@element.val()
+			if @element.attr("type") == "radio"
+				return @value_for_radio()
+			
+			@value_for_text()
+		
+		value_for_text: ->
+			@element.val() || ""
+		
+		value_for_radio: ->
+			@element.filter(":checked").val() || ""
 		
 		label: ->
 			field_id: @element.attr("id")
