@@ -87,14 +87,19 @@
 			return null unless name
 			
 			if @options.field_prefix
-				if matches = name.match(new RegExp("${@options.field_prefix}\\[(.+?)\\]"))
-					name: matches[1]
+				if matches = name.match(new RegExp("${@options.field_prefix}\\[(.+?)\\](.*)"))
+					name: matches[1] + (matches[2] || "")
 			
 			name
 		
 		field_name: (name) ->
 			if @options.field_prefix
-				"${@options.field_prefix}[${name}]"
+				subparts: ""
+				if matches: name.match(/(.+?)(\[.+)$/)
+					name: matches[1]
+					subparts: matches[2]
+				
+				"${@options.field_prefix}[${name}]${subparts}"
 			else
 				name
 	
@@ -113,6 +118,8 @@
 		value: ->
 			if @element.attr("type") == "radio"
 				return @value_for_radio()
+			if @element.attr("type") == "checkbox"
+				return @value_for_checkbox()
 			
 			@value_for_text()
 		
@@ -121,6 +128,12 @@
 		
 		value_for_radio: ->
 			@element.filter(":checked").val() || ""
+		
+		value_for_checkbox: ->
+			if @element.length > 1
+				@element.filter(":checked").map -> $(this).val()
+			else
+				if @element[0].checked then @element.val() else ""
 		
 		label: ->
 			field_id: @element.attr("id")

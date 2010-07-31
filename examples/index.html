@@ -17,6 +17,7 @@
 				
 				with (v) {
 					validates("username", "message", "genre", {presence: true});
+					validates("likes[]", {length: {minimum: 1, message: "need to select at least %{count}"}})
 					validates("email", {format: {"with": "email", message: "is not a valid e-mail"}});
 					validates_length_of("username", {minimum: 3, maximum: 10});
 					validates_numericality_of("number", {greater_than: 5, only_integer: true, allow_blank: true});
@@ -48,6 +49,12 @@
 			  <label class="collection_radio" for="comment_genre_male">Male</label>
 				<input id="comment_genre_female" name="comment[genre]" type="radio" value="female" />
 			  <label class="collection_radio" for="comment_genre_female">Female</label>
+			</div>
+			<div class="input string required">
+				<input id="comment_likes_computer" name="comment[likes][]" type="checkbox" value="computer" />
+			  <label class="collection_radio" for="comment_likes_computer">Computer</label>
+				<input id="comment_likes_party" name="comment[likes][]" type="checkbox" value="party" />
+			  <label class="collection_radio" for="comment_likes_party">Party</label>
 			</div>
 			<button type="submit">Send</button>
 		</form>
