@@ -221,7 +221,7 @@
 	##################################
 	$.FormCheck::validates: (attributes...) ->
 		defaults: attributes.extract_options()
-		validations: slice_object_and_remove(defaults, ["if", "unless", "on", "allow_blank", "allow_nil"])
+		validations: slice_object_and_remove(defaults, ["if", "unless", "allow_blank", "allow_nil"])
 		$.extend defaults, {attributes: attributes}
 		
 		for kind, options of validations
