@@ -31,12 +31,15 @@
 	class $.FormCheck.EachValidator extends $.FormCheck.Validator
 		constructor: (options) ->
 			@attributes = Array.wrap(delete_object_property(options, "attributes"))
+			options["allow_blank"]: true if options["allow_nil"]
+			options["allow_nil"]: true if options["allow_blank"]
 			super options
 			@check_valitity()
 		
 		validate: (form) ->
 			for attribute in @attributes
 				value = form.field(attribute).value()
+				continue if is_blank(value) and @options["allow_blank"]
 				@validate_each(form, attribute, value)
 		
 		validate_each: (record, attribute, value) ->
