@@ -231,9 +231,9 @@
 				@validates_with(validator, $.extend(defaults, $.FormCheck.parse_validates_options(options)))
 	
 	$.FormCheck.parse_validates_options: (options) ->
-		return options if $.isPlainObject
 		return {"in": options} if $.isArray(options)
 		return {"with": options} if options.test?
+		return options if $.isPlainObject
 		
 		{}
 )(jQuery)
