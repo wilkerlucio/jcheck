@@ -124,7 +124,7 @@
 	##################################
 	class $.FormCheck.Validations.InclusionValidator extends $.FormCheck.EachValidator
 		validate_each: (form, attribute, value) ->
-			form.erros.add(attribute, ":inclusion", $.extend(object_without_properties(@options, ['in']), {value: value})) if $.inArray(value, @options["in"]) == -1
+			form.errors.add(attribute, ":inclusion", $.extend(object_without_properties(@options, ['in']), {value: value})) if $.inArray(value, @options["in"]) == -1
 		
 	$.FormCheck.Validations.InclusionValidator.kind: "inclusion"
 	
