@@ -36,22 +36,27 @@
 					e.preventDefault() if @options.prevent_submit
 					notifier.notify() for notifier in @notifiers
 			
-			if @options.live_notifiers
-				self: this
+			self: this
+			
+			@form.find(":input").each () ->
+				name: self.parse_field_name($(this))
 				
-				@form.find(":input").focus (e) ->
-					name: self.parse_field_name($(this))
+				if name
+					self.field(name)
 					
-					if name
-						self.is_valid()
-						self.dispatch_live_notifiers("focus", name, e)
-
-				@form.find(":input").blur (e) ->
-					name: self.parse_field_name($(this))
-
-					if name
-						self.is_valid()
-						self.dispatch_live_notifiers("blur", name, e)
+					if self.options.live_notifiers
+						((el) ->
+							n: name
+						
+							el.focus (e) ->
+								self.is_valid()
+								self.dispatch_live_notifiers("focus", n, e)
+					
+							el.blur (e) ->
+								self.is_valid()
+								self.dispatch_live_notifiers("blur", n, e)
+						)($(this))
+					
 		
 		dispatch_live_notifiers: (callback, attribute, event) ->
 			notifier[callback](attribute, event) for notifier in @live_notifiers
