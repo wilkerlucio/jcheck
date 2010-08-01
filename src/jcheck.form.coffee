@@ -94,10 +94,14 @@
 			if @options.field_prefix
 				if matches = name.match(new RegExp("${@options.field_prefix}\\[(.+?)\\](.*)"))
 					name: matches[1] + (matches[2] || "")
+				else
+					name: ":" + name
 			
 			name
 		
 		field_name: (name) ->
+			return matches[1] if matches = name.match(/^:(.+)/)
+			
 			if @options.field_prefix
 				subparts: ""
 				if matches: name.match(/(.+?)(\[.+)$/)
