@@ -90,29 +90,29 @@
 			super form
 			@ballons: {}
 		
-		focus: (attribute) ->
-			@notify(attribute)
+		focus: (attribute, evt) ->
+			@notify(attribute, evt || null)
 		
-		notify: (attribute) ->
+		notify: (attribute, evt) ->
 			dialog: @dialog_for_attribute(attribute)
 			messages: @form.errors.on(attribute)
 			
 			return if messages.isEqual(dialog.messages)
 			
-			element: @form.field(attribute).element
+			element: if evt and evt.target then $(evt.target) else @form.element
 			offset: element.offset()
 			
 			if messages.length > 0
 				if dialog.messages and dialog.messages.length > 0
 					@populate_dialog(dialog, messages)
-					dialog.css({top: "${offset.top - dialog.outerHeight()}px", left: "${offset.left + element.outerWidth()}px"})
+					dialog.css({top: "${offset.top - dialog.outerHeight()}px", left: "${offset.left + Math.round(element.outerWidth() * 0.9)}px"})
 				else
 					dialog.css({left: "-1000px", top: "-1000px"})
 					dialog.hide()
 				
 					@populate_dialog(dialog, messages)
 				
-					dialog.css({top: "${offset.top - dialog.outerHeight()}px", left: "${offset.left + element.outerWidth()}px"})
+					dialog.css({top: "${offset.top - dialog.outerHeight()}px", left: "${offset.left + Math.round(element.outerWidth() * 0.9)}px"})
 					dialog.fadeIn("fast")
 			else
 				@close_dialog(attribute)
