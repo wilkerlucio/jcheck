@@ -136,7 +136,7 @@
 			
 			dialog: $(document.createElement("div"))
 			dialog.addClass("jcheck-inline-ballon-tip")
-			dialog.css({position: "absolute"})
+			dialog.css({position: "absolute", top: "-1000px", left: "-1000px"})
 			
 			content_area: $(document.createElement("div"))
 			content_area.addClass("content")
