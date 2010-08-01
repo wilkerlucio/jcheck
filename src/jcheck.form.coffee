@@ -120,9 +120,18 @@
 			@element: @form_checker.form.find(":input[name='${name}']")
 			
 			if @form_checker.options.live_notifiers
-				@element.keyup (e) ->
-					form.is_valid()
-					form.dispatch_live_notifiers("notify", attribute, e)
+				for evt in @events_for_element()
+					@element[evt] (e) ->
+						form.is_valid()
+						form.dispatch_live_notifiers("notify", attribute, e)
+		
+		events_for_element: ->
+			if @element.attr("type") == "radio" or @element.attr("type") == "checkbox"
+				return ["change"]
+			if @element[0].tagName.toLowerCase() == "select"
+				return ["keyup", "change"]
+			
+			["keyup"]
 		
 		value: ->
 			if @element.attr("type") == "radio"
