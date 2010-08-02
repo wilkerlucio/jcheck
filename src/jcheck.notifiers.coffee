@@ -85,10 +85,10 @@
 	
 	$.FormCheck.Notifiers.NotificationDialog.kind = "notification_dialog"
 	
-	class $.FormCheck.Notifiers.TipBallons extends $.FormCheck.Notifiers.DialogBase
+	class $.FormCheck.Notifiers.TipBalloons extends $.FormCheck.Notifiers.DialogBase
 		constructor: (form) ->
 			super form
-			@ballons: {}
+			@balloons: {}
 		
 		focus: (attribute, evt) ->
 			@notify(attribute, evt || null)
@@ -123,8 +123,8 @@
 			@close_dialog(attribute)
 		
 		dialog_for_attribute: (attribute) ->
-			@ballons[attribute]: @generate_dialog() unless @ballons[attribute]
-			@ballons[attribute]
+			@balloons[attribute]: @generate_dialog() unless @balloons[attribute]
+			@balloons[attribute]
 		
 		close_dialog: (attribute) ->
 			dialog: @dialog_for_attribute(attribute)
@@ -135,7 +135,7 @@
 			dialog: null
 			
 			dialog: $(document.createElement("div"))
-			dialog.addClass("jcheck-inline-ballon-tip")
+			dialog.addClass("jcheck-inline-balloon-tip")
 			dialog.css({position: "absolute", top: "-1000px", left: "-1000px"})
 			
 			content_area: $(document.createElement("div"))
@@ -172,5 +172,5 @@
 		populate_dialog: (dialog, messages) ->
 			super dialog.find(".content"), messages
 	
-	$.FormCheck.Notifiers.TipBallons.kind = "tip_ballons"
+	$.FormCheck.Notifiers.TipBalloons.kind = "tip_balloons"
 )(jQuery)

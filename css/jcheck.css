@@ -2,11 +2,11 @@
 #jcheck-error-dialog ul { margin: 10px; list-style: none; padding: 0;}
 #jcheck-error-dialog li { margin: 0; padding: 0; color: #fff; font-size: 12px; font-family: Verdana; }
 
-.jcheck-inline-ballon-tip { margin-left: -30px; margin-top: 3px; }
-.jcheck-inline-ballon-tip .content { background: #ee0101; border: 2px solid #000; padding: 2px 5px; border-radius: 8px; box-shadow: 0 0 6px #000; -moz-border-radius: 8px; -webkit-border-radius: 8px; -moz-box-shadow: 0 0 6px #000; -webkit-box-shadow: 0 0 6px #000; }
-.jcheck-inline-ballon-tip ul { margin: 3px; list-style: none; padding: 0;}
-.jcheck-inline-ballon-tip li { margin: 0; padding: 0; color: #fff; font-size: 12px; font-family: Verdana; }
-.jcheck-inline-ballon-tip .arrow-container { margin-top: -2px; width: 19px; margin-left: 20px;}
-.jcheck-inline-ballon-tip .arrow-container div {background: #ee0101; border: 2px solid #000; border-width: 0 2px; box-shadow: 0 2px 3px #000; -moz-box-shadow: 0 2px 3px #000; -webkit-box-shadow: 0 2px 3px #000;}
-.jcheck-inline-ballon-tip .arrow-container div.line2 {background: #000; border: 0;}
-.jcheck-inline-ballon-tip .arrow-container div.line1 {background: #000; border: 0;}
+.jcheck-inline-balloon-tip { margin-left: -30px; margin-top: 3px; }
+.jcheck-inline-balloon-tip .content { background: #ee0101; border: 2px solid #000; padding: 2px 5px; border-radius: 8px; box-shadow: 0 0 6px #000; -moz-border-radius: 8px; -webkit-border-radius: 8px; -moz-box-shadow: 0 0 6px #000; -webkit-box-shadow: 0 0 6px #000; }
+.jcheck-inline-balloon-tip ul { margin: 3px; list-style: none; padding: 0;}
+.jcheck-inline-balloon-tip li { margin: 0; padding: 0; color: #fff; font-size: 12px; font-family: Verdana; }
+.jcheck-inline-balloon-tip .arrow-container { margin-top: -2px; width: 19px; margin-left: 20px;}
+.jcheck-inline-balloon-tip .arrow-container div {background: #ee0101; border: 2px solid #000; border-width: 0 2px; box-shadow: 0 2px 3px #000; -moz-box-shadow: 0 2px 3px #000; -webkit-box-shadow: 0 2px 3px #000;}
+.jcheck-inline-balloon-tip .arrow-container div.line2 {background: #000; border: 0;}
+.jcheck-inline-balloon-tip .arrow-container div.line1 {background: #000; border: 0;}

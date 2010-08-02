@@ -20,7 +20,7 @@
 				prevent_submit: true
 				field_prefix: null
 				notifiers: ["notification_dialog"]
-				live_notifiers: ["tip_ballons"]
+				live_notifiers: ["tip_balloons"]
 				language: 'en'
 			}, options || {})
 			
