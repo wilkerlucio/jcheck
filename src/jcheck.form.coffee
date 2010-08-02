@@ -42,24 +42,33 @@
 				name: self.parse_field_name($(this))
 				
 				if name
-					self.field(name)
+					field: self.field(name)
 					
 					if self.options.live_notifiers
 						((el) ->
 							n: name
+							f: field
 						
 							el.focus (e) ->
 								self.is_valid()
-								self.dispatch_live_notifiers("focus", n, e)
+								self.dispatch_live_notifiers("focus", n, e, f.live_notifiers)
 					
 							el.blur (e) ->
 								self.is_valid()
-								self.dispatch_live_notifiers("blur", n, e)
+								self.dispatch_live_notifiers("blur", n, e, f.live_notifiers)
 						)($(this))
 					
 		
-		dispatch_live_notifiers: (callback, attribute, event) ->
-			notifier[callback](attribute, event) for notifier in @live_notifiers
+		dispatch_live_notifiers: (callback, attribute, event, notifiers) ->
+			current_notifiers: []
+			
+			for n in notifiers
+				if n == ":parent"
+					current_notifiers: current_notifiers.concat(@live_notifiers)
+				else
+					current_notifiers.push(@get_notifier(n))
+			
+			notifier[callback](attribute, event) for notifier in current_notifiers
 		
 		setup_notifiers: ->
 			for type in ["notifiers", "live_notifiers"]
@@ -117,13 +126,14 @@
 			@form_checker: form
 			@field_name: name
 			@attribute: attribute
+			@live_notifiers: [":parent"]
 			@element: @form_checker.form.find(":input[name='${name}']")
 			
 			if @form_checker.options.live_notifiers
 				for evt in @events_for_element()
-					@element[evt] (e) ->
-						form.is_valid()
-						form.dispatch_live_notifiers("notify", attribute, e)
+					@element[evt] (e) =>
+						@form_checker.is_valid()
+						@form_checker.dispatch_live_notifiers("notify", @attribute, e, @live_notifiers)
 		
 		events_for_element: ->
 			if @element.attr("type") == "radio" or @element.attr("type") == "checkbox"

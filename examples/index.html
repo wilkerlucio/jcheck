@@ -14,6 +14,7 @@
 		<script type="text/javascript">
 			$(function() {
 				var v = $("form.comment").jcheck({field_prefix: "comment"});
+				v.field("likes[]").live_notifiers = [];
 				
 				with (v) {
 					validates(":off_context", "username", "message", "genre", {presence: true});
