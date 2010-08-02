@@ -56,6 +56,20 @@
 		$.extend(options, {attributes: attributes})
 	
 	##################################
+	# block validator
+	##################################
+	class $.FormCheck.Validations.BlockValidator extends $.FormCheck.EachValidator
+		constructor: (options) ->
+			@callback: delete_object_property(options, 'callback') || $.noop
+			super options
+		
+		validate_each: (form, attribute, value) ->
+			@callback.call(this, form, attribute, value)
+	
+	$.FormCheck::validates_each: (attributes...) ->
+		@validates_with($.FormCheck.Validations.BlockValidator, @attributes_for_with(attributes))
+	
+	##################################
 	# acceptance validator
 	##################################
 	class $.FormCheck.Validations.AcceptanceValidator extends $.FormCheck.EachValidator

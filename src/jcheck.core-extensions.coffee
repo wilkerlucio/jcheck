@@ -51,7 +51,7 @@
 		false
 	
 	window.delete_object_property: (object, property) ->
-		value: object[property]
+		value: object[property] || null
 		delete object[property]
 		value
 	

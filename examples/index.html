@@ -22,6 +22,11 @@
 					validates("email", {format: {"with": "email", message: "is not a valid e-mail"}});
 					validates_length_of("username", {minimum: 3, maximum: 10});
 					validates_numericality_of("number", {greater_than: 5, only_integer: true, allow_blank: true});
+					validates_each("username", "message", {callback: function(form, attribute, value) {
+						if (!(value.match(/^[A-Z]/))) {
+							form.errors.add(attribute, "need to start with an uppercase letter", this.options)
+						}
+					}});
 				}
 			});
 		</script>
