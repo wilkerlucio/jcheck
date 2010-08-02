@@ -175,7 +175,6 @@
 			
 			if @element.length > 1
 				field_id: matches[1] if matches = field_id.match(/(.+)_.+$/)
-				console.log(field_id)
 			
 			label_element: @form_checker.form.find("label[for='${field_id}']")
 			
