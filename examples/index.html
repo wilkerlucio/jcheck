@@ -15,6 +15,7 @@
 			$(function() {
 				var v = $("form.comment").jcheck({field_prefix: "comment"});
 				v.field("likes[]").live_notifiers = [];
+				v.field("genre").custom_label = "Genre";
 				
 				with (v) {
 					validates(":off_context", "username", "message", "genre", {presence: true});

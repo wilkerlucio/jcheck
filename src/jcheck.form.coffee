@@ -128,6 +128,7 @@
 			@attribute: attribute
 			@live_notifiers: [":parent"]
 			@element: @form_checker.form.find(":input[name='${name}']")
+			@custom_label: null
 			
 			if @form_checker.options.live_notifiers
 				for evt in @events_for_element()
@@ -164,6 +165,12 @@
 				if @element[0].checked then @element.val() else ""
 		
 		label: ->
+			unless @custom_label == null
+				if $.isFunction(@custom_label)
+				  return @custom_label.call(this)
+				else
+					return @custom_label
+			
 			field_id: @element.attr("id")
 			label_element: @form_checker.form.find("label[for='${field_id}']")
 			
