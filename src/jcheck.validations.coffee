@@ -240,9 +240,10 @@
 		
 		for kind, options of validations
 			validator: $.FormCheck.find_validator(kind)
+			current_options: $.extend({}, defaults)
 			
 			if validator
-				@validates_with(validator, $.extend(defaults, $.FormCheck.parse_validates_options(options)))
+				@validates_with(validator, $.extend(current_options, $.FormCheck.parse_validates_options(options)))
 	
 	$.FormCheck.parse_validates_options: (options) ->
 		return {"in": options} if $.isArray(options)
