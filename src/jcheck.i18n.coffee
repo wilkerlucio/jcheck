@@ -36,8 +36,8 @@
 			en: {
 				errors: {
 					messages: {
-						inclusion: "is not included in the list"
-			      exclusion: "is reserved"
+						inclusion: "%{value} is not a valid option"
+			      exclusion: "%{value} is reserved"
 			      invalid: "is invalid"
 			      confirmation: "doesn't match confirmation"
 			      accepted: "must be accepted"
