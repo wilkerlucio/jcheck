@@ -74,10 +74,10 @@
 	##################################
 	class $.FormCheck.Validations.AcceptanceValidator extends $.FormCheck.EachValidator
 		constructor: (options) ->
-			super $.extend({allow_nil: true, accept: '1'}, options)
+			super $.extend({accept: '1'}, options)
 		
 		validate_each: (form, attribute, value) ->
-			form.erros.add(attribute, ":accepted", object_without_properties(@options, ['accept', 'allow_nil']))
+			form.errors.add(attribute, ":accepted", object_without_properties(@options, ['accept', 'allow_nil'])) unless value == @options.accept
 	
 	$.FormCheck.Validations.AcceptanceValidator.kind: "acceptance"
 	
