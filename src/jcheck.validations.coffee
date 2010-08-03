@@ -89,8 +89,9 @@
 	##################################
 	class $.FormCheck.Validations.ConfirmationValidator extends $.FormCheck.EachValidator
 		validate_each: (form, attribute, value) ->
-			confirmed: form.field(attribute + "_confirmation").value()
-			form.errors.add(attribute, ":confirmation", @options)
+			confirmed_field_name: attribute + "_confirmation"
+			confirmed: form.field(confirmed_field_name).value()
+			form.errors.add(confirmed_field_name, ":confirmation", @options) unless value == confirmed
 	
 	$.FormCheck.Validations.ConfirmationValidator.kind: "confirmation"
 	
