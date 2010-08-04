@@ -187,7 +187,7 @@
 				form.errors.add(attribute, ":not_a_number", @filtered_options(raw_value))
 				return
 			
-			if @options.only_integer and !(raw_value.match(/^\d+$/))
+			if @options.only_integer and !(raw_value.match(/^[-]?\d+$/))
 				form.errors.add(attribute, ":not_an_integer", @filtered_options(raw_value))
 				return
 			else
