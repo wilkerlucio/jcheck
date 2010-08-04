@@ -15,6 +15,31 @@
 (($) ->
 	$.FormCheck.Notifiers = {}
 	
+	$.FormCheck.Notifiers.create: (name, object, base) ->
+		object: $.extend({
+			constructor: ->
+			focus: -> this.notify.apply(this, arguments)
+			blur: -> 
+			notify: ->
+		}, object || {})
+		
+		base ?= $.FormCheck.Notifiers.Base
+		class_name: name.camelize() + "Notifier"
+		
+		notifier: ->
+			$.FormCheck.Notifiers.Base.apply(this, arguments)
+			this.constructor.apply(this, arguments)
+		
+		__extends(notifier, base)
+		
+		$.extend(notifier.prototype, object)
+		
+		notifier.kind = name
+		
+		$.FormCheck.Notifiers[class_name]: notifier
+		
+		notifier
+	
 	$.FormCheck.find_notifier: (kind) ->
 		for name, notifier of $.FormCheck.Notifiers
 			return notifier if notifier.kind == kind
