@@ -33,6 +33,14 @@
 			
 			@errors[field].push(message)
 		
+		attributes_with_errors: ->
+			attributes: []
+			
+			for attribute, errors of @errors
+				attributes.push(attribute) if errors.length > 0
+			
+			attributes
+		
 		on: (attribute) ->
 			@errors[attribute] ?= []
 			@errors[attribute]
