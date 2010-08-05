@@ -27,7 +27,7 @@
 		class_name: name.camelize() + "Notifier"
 		
 		notifier: ->
-			$.FormCheck.Notifiers.Base.apply(this, arguments)
+			base.apply(this, arguments)
 			this.constructor.apply(this, arguments)
 		
 		__extends(notifier, base)
