@@ -55,6 +55,32 @@
 		options: attributes.extract_options()
 		$.extend(options, {attributes: attributes})
 	
+	# create validator helper
+	$.FormCheck.Validator.create: (name, object, base) ->
+		object: $.extend({
+			constructor: ->
+		}, object || {})
+		
+		base ?= $.FormCheck.EachValidator
+		class_name: name.camelize() + "Validator"
+		
+		validator: ->
+			base.apply(this, arguments)
+			this.constructor.apply(this, arguments)
+		
+		__extends(validator, base)
+		
+		$.extend(validator.prototype, object)
+		
+		validator.kind = name
+		
+		$.FormCheck.Validations[class_name]: validator
+		
+		$.FormCheck.prototype["validates_${name}_of"]: (attributes...) ->
+			@validates_with(validator, @attributes_for_with(attributes))
+		
+		validator
+	
 	##################################
 	# block validator
 	##################################
