@@ -76,9 +76,23 @@
 				this[type]: @get_notifier(kind) for kind in @options[type] if @options[type]
 		
 		get_notifier: (notifier) ->
+			parameters: [this]
+			
+			if $.isArray(notifier)
+				parameters: parameters.concat(notifier.slice(1))
+				notifier: notifier[0]
+			
 			if $.isString(notifier)
-				new ($.FormCheck.find_notifier(notifier))(this)
+				notifier_class: $.FormCheck.find_notifier(notifier)
+					
+				creator: ->
+					notifier_class.apply(this, parameters)
+				
+				creator.prototype: notifier_class.prototype
+				
+				new creator()
 			else
+				notifier.form: this
 				notifier
 		
 		validate: (validator) ->
