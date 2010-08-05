@@ -67,7 +67,12 @@
 			@callback.call(this, form, attribute, value)
 	
 	$.FormCheck::validates_each: (attributes...) ->
-		@validates_with($.FormCheck.Validations.BlockValidator, @attributes_for_with(attributes))
+		options: @attributes_for_with(attributes)
+		
+		if $.isFunction(options.attributes[options.attributes.length - 1])
+			options.callback = attributes.pop()
+		
+		@validates_with($.FormCheck.Validations.BlockValidator, options)
 	
 	##################################
 	# acceptance validator
