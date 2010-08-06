@@ -21,7 +21,7 @@
 				field_prefix: null
 				notifiers: ["notification_dialog"]
 				live_notifiers: ["tip_balloons"]
-				language: 'en'
+				language: $.FormCheck.default_locale
 			}, options || {})
 			
 			@field_cache: {}
@@ -134,6 +134,8 @@
 				"${@options.field_prefix}[${name}]${subparts}"
 			else
 				name
+	
+	$.FormCheck.default_locale: "en"
 	
 	class $.FormCheck.Field
 		constructor: (form, name, attribute) ->

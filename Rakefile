@@ -16,7 +16,8 @@ desc "Build minified version"
 task :build do
   modules = ["core-extensions", "form", "errors", "notifiers", "validations", "i18n"]
   
-  content = modules.inject("") { |c, mod| c + File.read("lib/jcheck.#{mod}.js") } 
+  content = modules.inject("") { |c, mod| c + File.read("lib/jcheck.#{mod}.js") }
+  content << File.read("lib/locales/jcheck.en.js")
   minyfied = JSMin.minify(content)
   version = File.read("VERSION")
   
@@ -38,7 +39,7 @@ task :build do
  */
 LIC
   
-  File.open("dist/jcheck.#{version}.min.js", "wb") do |f|
+  File.open("dist/jcheck-#{version}.min.js", "wb") do |f|
     f << licence
     f << minyfied
   end
