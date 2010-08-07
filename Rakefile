@@ -2,6 +2,11 @@
 
 require 'rubygems'
 require 'jsmin'
+require 'zip'
+
+def current_version
+  File.read("VERSION")
+end
 
 desc "Compile CoffeeScripts and watch for changes"
 task :coffee do
@@ -19,7 +24,7 @@ task :build do
   content = modules.inject("") { |c, mod| c + File.read("lib/jcheck.#{mod}.js") }
   content << File.read("lib/locales/jcheck.en.js")
   minyfied = JSMin.minify(content)
-  version = File.read("VERSION")
+  version = current_version
   
   licence = <<LIC
 /**
@@ -42,5 +47,21 @@ LIC
   File.open("dist/jcheck-#{version}.min.js", "wb") do |f|
     f << licence
     f << minyfied
+  end
+end
+
+desc "Build distribuition file"
+task :create_release do
+  Rake::Task["build"].execute
+  
+  dist_file = "dist/jcheck-#{current_version}.zip"
+  
+  File.delete(dist_file) if File.exists?(dist_file)
+  
+  Zip::ZipFile.open(dist_file, Zip::ZipFile::CREATE) do |zip|
+    zip.mkdir("javascripts")
+    zip.get_output_stream("javascripts/jcheck-#{current_version}.min.js") { |f| f << File.read("dist/jcheck-#{current_version}.min.js") }
+    zip.mkdir("stylesheets")
+    zip.get_output_stream("stylesheets/jcheck.css") { |f| f << File.read("css/jcheck.css") }
   end
 end
