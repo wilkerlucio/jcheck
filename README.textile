@@ -1,0 +1,25 @@
+h1. jCheck
+
+jCheck provides an easy way to create full customized validations for your
+javascript. You should check our "site":http://jcheck.net for demos and full
+documentation for using it.
+
+h2. Developing
+
+jCheck is developed using "Coffee Script":http://jashkenas.github.com/coffee-script/
+version 0.7.2, so you need to install it in order to compile *Coffee Script*
+sources.
+
+h2. Roadmap
+
+h3. 0.6
+
+* Port source to Coffee Script 0.9
+
+h3. 1.0
+
+* Cover features with automated tests
+
+h3. 2.0
+
+* Framework independence
