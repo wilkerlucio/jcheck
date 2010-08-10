@@ -4,6 +4,10 @@
 		<input type="text" name="text" id="text" />
 	</div>
 	<div>
+		<label for="user[name]">Your Name</label>
+		<input type="text" name="user[name]" id="user[name]" />
+	</div>
+	<div>
 		<label for="password">Password</label>
 		<input type="text" name="password" id="password" />
 	</div>
@@ -16,9 +20,10 @@
 		<input type="checkbox" name="checkbox" id="checkbox" value="1" />
 	</div>
 	<div>
-		<input type="checkbox" name="checkboxes[]" id="checkbox" value="1" />
-		<input type="checkbox" name="checkboxes[]" id="checkbox" value="2" />
-		<input type="checkbox" name="checkboxes[]" id="checkbox" value="3" />
+		<label for="checkboxes" style="display: none">Check List</label>
+		<input type="checkbox" name="checkboxes[]" id="checkboxes_1" value="1" />
+		<input type="checkbox" name="checkboxes[]" id="checkboxes_2" value="2" />
+		<input type="checkbox" name="checkboxes[]" id="checkboxes_3" value="3" />
 	</div>
 	<div>
 		<select name="multiple_select" multiple="multiple">

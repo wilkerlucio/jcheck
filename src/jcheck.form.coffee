@@ -114,6 +114,9 @@
 			name: input.attr("name")
 			return null unless name
 			
+			@reverse_field_name(name)
+		
+		reverse_field_name: (name) ->
 			if @options.field_prefix
 				if matches = name.match(new RegExp("${@options.field_prefix}\\[(.+?)\\](.*)"))
 					name: matches[1] + (matches[2] || "")
