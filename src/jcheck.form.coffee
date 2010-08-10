@@ -176,7 +176,7 @@
 		
 		value_for_checkbox: ->
 			if @element.length > 1
-				@element.filter(":checked").map -> $(this).val()
+				$.makeArray(@element.filter(":checked").map -> $(this).val())
 			else
 				if @element[0].checked then @element.val() else ""
 		
