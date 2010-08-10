@@ -17,6 +17,7 @@
 			function runSuites() {
 				JSpec
 				.exec('unit/core-extensions_spec.js')
+				.exec('unit/errors_spec.js')
 				.exec('unit/validations_spec.js')
 				.run({ fixturePath: 'fixtures' })
 				.report()
