@@ -280,6 +280,7 @@
 	$.FormCheck.parse_validates_options: (options) ->
 		return {"in": options} if $.isArray(options)
 		return {"with": options} if options.test?
+		return {} if options == true
 		return options if $.isPlainObject
 		
 		{}

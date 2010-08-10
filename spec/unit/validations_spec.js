@@ -353,5 +353,23 @@ describe 'jCheck'
 				end
 			end
 		end
+		
+		describe "validates"
+			it "should parse parameters"
+				params = [[{some: 'data'}, {some: 'data'}], [true, {}], [/regexp/, {"with": /regexp/}], [[1, 2, 3], {"in": [1, 2, 3]}]]
+				
+				for (var i = 0; i < params.length; i++) {
+					var p = params[i]
+					
+					jQuery.FormCheck.parse_validates_options(p[0]).should.eql p[1]
+				}
+			end
+			
+			it "should validates each validator"
+				v.validates("text", {presence: true})
+				
+				v.should.have_error_message_on("can't be blank", "text")
+			end
+		end
 	end
 end
