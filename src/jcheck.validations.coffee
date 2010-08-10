@@ -214,7 +214,7 @@
 			raw_value: value
 			value: parseFloat(value)
 			
-			if isNaN(value)
+			if isNaN(value) or !(raw_value.match(/\d+$/))
 				form.errors.add(attribute, ":not_a_number", @filtered_options(raw_value))
 				return
 			
@@ -255,7 +255,7 @@
 	##################################
 	class $.FormCheck.Validations.PresenceValidator extends $.FormCheck.EachValidator
 		validate_each: (form, attribute, value) ->
-			form.errors.add(attribute, ":blank", @options) unless value.length > 0
+			form.errors.add(attribute, ":blank", @options) if is_blank(value)
 	
 	$.FormCheck.Validations.PresenceValidator.kind: 'presence'
 
