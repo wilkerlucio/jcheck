@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<link type="text/css" rel="stylesheet" href="lib/jspec.css" />
+		<meta rel="Content-Type" content="text/html; charset=utf-8" />
 		<script src="lib/jspec.js"></script>
 		<script src="lib/jspec.xhr.js"></script>
 		<script type="text/javascript" src="../vendor/jquery.js"></script>
@@ -19,6 +20,7 @@
 				.exec('unit/core-extensions_spec.js')
 				.exec('unit/errors_spec.js')
 				.exec('unit/validations_spec.js')
+				.exec('unit/i18n_spec.js')
 				.run({ fixturePath: 'fixtures' })
 				.report()
 			}
