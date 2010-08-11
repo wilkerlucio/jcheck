@@ -70,15 +70,15 @@
 		
 		notify: () ->
 			dialog: @generate_dialog()
-			dialog.css({left: "-1000px", top: "-1000px"})
+			dialog.css({left: "-1000px"})
 			@populate_dialog(dialog, @form.errors.full_messages())
-			dialog.css({top: "-${dialog.outerHeight()}px", left: "50%", "margin-left": "-${Math.round(dialog.outerWidth() / 2)}px"})
-			dialog.animate({top: "0px"})
+			dialog.css({"margin-top": "-${dialog.outerHeight() + 10}px", left: "50%", "margin-left": "-${Math.round(dialog.outerWidth() / 2)}px"})
+			dialog.animate({"margin-top": "0px"})
 			dialog.mouseout()
 		
 		close_dialog: ->
 			dialog: @generate_dialog()
-			dialog.animate({top: "-${dialog.outerHeight() + 10}px"})
+			dialog.animate({"margin-top": "-${dialog.outerHeight() + 10}px"})
 		
 		generate_dialog: () ->
 			dialog_id: "jcheck-error-dialog"
@@ -87,7 +87,8 @@
 			if $("#${dialog_id}").length == 0
 				dialog: $(document.createElement("div"))
 				dialog.attr("id", dialog_id)
-				dialog.css({position: "fixed"})
+				
+				dialog.addClass("ie-fixed") if $.browser.msie and parseInt($.browser.version) < 7
 				
 				dialog.click =>
 					@close_dialog()
