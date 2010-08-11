@@ -10,11 +10,19 @@ jCheck is developed using "Coffee Script":http://jashkenas.github.com/coffee-scr
 version 0.7.2, so you need to install it in order to compile *Coffee Script*
 sources.
 
+h2. Running specs
+
+To run specs just open the file @spec/dom.html@
+
 h2. Roadmap
 
 h3. 0.6.1
 
 * Port source to Coffee Script 0.9
+
+h3. 0.7.0
+
+* Ajax validator
 
 h3. 1.0
 
@@ -23,3 +31,17 @@ h3. 1.0
 h3. 2.0
 
 * Framework independence
+
+h2. Changelog
+
+h3. 0.6.0
+
+* added jspec to the project
+* create a lot of specs
+* fixed presence validator (don't allow strings with just spaces)
+* fixed numaricality validator (don't allow things like 90px)
+* full compatibility with Internet Explorer 6
+
+h3. 0.5.0
+
+* First Release
