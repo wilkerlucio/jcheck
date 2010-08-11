@@ -12,7 +12,7 @@ sources.
 
 h2. Roadmap
 
-h3. 0.6
+h3. 0.6.1
 
 * Port source to Coffee Script 0.9
 
