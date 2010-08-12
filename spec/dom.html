@@ -2,9 +2,10 @@
 	<head>
 		<link type="text/css" rel="stylesheet" href="lib/jspec.css" />
 		<meta rel="Content-Type" content="text/html; charset=utf-8" />
+		<script type="text/javascript" src="../vendor/jquery.js"></script>
 		<script src="lib/jspec.js"></script>
 		<script src="lib/jspec.xhr.js"></script>
-		<script type="text/javascript" src="../vendor/jquery.js"></script>
+		<script src="lib/jspec.jquery.js"></script>
 		<script type="text/javascript" src="../lib/jcheck.core-extensions.js"></script>
 		<script type="text/javascript" src="../lib/jcheck.form.js"></script>
 		<script type="text/javascript" src="../lib/jcheck.errors.js"></script>
@@ -21,6 +22,7 @@
 				.exec('unit/form_spec.js')
 				.exec('unit/errors_spec.js')
 				.exec('unit/validations_spec.js')
+				.exec('unit/notifiers_spec.js')
 				.exec('unit/i18n_spec.js')
 				.run({ fixturePath: 'fixtures' })
 				.report()
