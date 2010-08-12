@@ -73,42 +73,44 @@
 			dialog.css({left: "-1000px"})
 			@populate_dialog(dialog, @form.errors.full_messages())
 			dialog.css({"margin-top": "-${dialog.outerHeight() + 10}px", left: "50%", "margin-left": "-${Math.round(dialog.outerWidth() / 2)}px"})
+			dialog.show()
 			dialog.animate({"margin-top": "0px"})
 			dialog.mouseout()
 		
 		close_dialog: ->
-			dialog: @generate_dialog()
-			dialog.animate({"margin-top": "-${dialog.outerHeight() + 10}px"})
+			@current_dialog.animate({"margin-top": "-${@current_dialog.outerHeight() + 10}px"}, { complete: -> $(this).hide() })
 		
 		generate_dialog: () ->
+			clearTimeout($.FormCheck.Notifiers.NotificationDialog.dialog_timer) if $.FormCheck.Notifiers.NotificationDialog.dialog_timer
 			dialog_id: "jcheck-error-dialog"
-			dialog: null
 			
-			if $("#${dialog_id}").length == 0
-				dialog: $(document.createElement("div"))
-				dialog.attr("id", dialog_id)
-				
-				dialog.addClass("ie-fixed") if $.browser.msie and parseInt($.browser.version) < 7
-				
-				dialog.click =>
-					@close_dialog()
-				
-				if @options.autoclose_in
-					dialog.mouseover =>
-						clearInterval(@close_timer) if @close_timer
-				
-					dialog.mouseout =>
-						self: this
-						callback: () ->
-							self.close_dialog()
-						@close_timer: setTimeout(callback, @options.autoclose_in)
-				
-				$(document.body).append(dialog)
-			else
-				dialog: $("#${dialog_id}")
+			$("#${dialog_id}").remove()
+			
+			dialog: $(document.createElement("div"))
+			dialog.attr("id", dialog_id)
+			
+			@current_dialog = dialog
+			
+			dialog.addClass("ie-fixed") if $.browser.msie and parseInt($.browser.version) < 7
+			
+			dialog.click =>
+				@close_dialog()
+			
+			if @options.autoclose_in
+				dialog.mouseover =>
+					clearTimeout($.FormCheck.Notifiers.NotificationDialog.dialog_timer) if $.FormCheck.Notifiers.NotificationDialog.dialog_timer
+			
+				dialog.mouseout =>
+					self: this
+					callback: () ->
+						self.close_dialog()
+					$.FormCheck.Notifiers.NotificationDialog.dialog_timer: setTimeout(callback, @options.autoclose_in)
+			
+			$(document.body).append(dialog)
 			
 			dialog
 	
+	$.FormCheck.Notifiers.NotificationDialog.dialog_timer = 0
 	$.FormCheck.Notifiers.NotificationDialog.kind = "notification_dialog"
 	
 	class $.FormCheck.Notifiers.TipBalloons extends $.FormCheck.Notifiers.DialogBase
