@@ -19,8 +19,8 @@
 			@options: $.extend({
 				prevent_submit: true
 				field_prefix: null
-				notifiers: ["notification_dialog"]
-				live_notifiers: ["tip_balloons"]
+				notifiers: $.FormCheck.default_notifiers
+				live_notifiers: $.FormCheck.default_live_notifiers
 				language: $.FormCheck.default_locale
 			}, options || {})
 			
@@ -139,6 +139,8 @@
 				name
 	
 	$.FormCheck.default_locale: "en"
+	$.FormCheck.default_notifiers: ["notification_dialog"]
+	$.FormCheck.default_live_notifiers: ["tip_balloons"]
 	
 	class $.FormCheck.Field
 		constructor: (form, name, attribute) ->

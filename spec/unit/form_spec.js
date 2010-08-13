@@ -16,6 +16,54 @@ describe "jCheck"
 			end
 		end
 		
+		describe "notifiers setup"
+			it "should user notification_dialog and tip_ballons as default notifiers"
+				v = $(fixture("form")).jcheck()
+				v.should.have 1, 'notifiers'
+				v.should.have 1, 'live_notifiers'
+				v.notifiers[0].should.be_an $.FormCheck.Notifiers.NotificationDialog
+				v.live_notifiers[0].should.be_an $.FormCheck.Notifiers.TipBalloons
+			end
+			
+			it "should be able to customize overall notifiers on creation"
+				v = $(fixture("form")).jcheck({notifiers: []})
+				v.should.have 0, 'notifiers'
+				v.should.have 1, 'live_notifiers'
+				v.live_notifiers[0].should.be_an $.FormCheck.Notifiers.TipBalloons
+			end
+			
+			it "should be able to customize live notifiers on creation"
+				v = $(fixture("form")).jcheck({live_notifiers: []})
+				v.should.have 1, 'notifiers'
+				v.should.have 0, 'live_notifiers'
+				v.notifiers[0].should.be_an $.FormCheck.Notifiers.NotificationDialog
+			end
+			
+			it "should be able to customize both kind notifiers at once"
+				v = $(fixture("form")).jcheck({notifiers: [], live_notifiers: []})
+				v.should.have 0, 'notifiers'
+				v.should.have 0, 'live_notifiers'
+			end
+			
+			it "should be able to customize default overall notifiers"
+				jQuery.FormCheck.default_notifiers = []
+				
+				v = $(fixture("form")).jcheck()
+				v.should.have 0, 'notifiers'
+				
+				jQuery.FormCheck.default_notifiers = ["notification_dialog"]
+			end
+			
+			it "should be able to customize default live notifiers"
+				jQuery.FormCheck.default_live_notifiers = []
+				
+				v = $(fixture("form")).jcheck()
+				v.should.have 0, 'live_notifiers'
+				
+				jQuery.FormCheck.default_live_notifiers = ["tip_balloons"]
+			end
+		end
+		
 		describe "Field"
 			describe "labels"
 				before_each
