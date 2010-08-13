@@ -13,19 +13,19 @@
 # limitations under the License.
 
 (($) ->
-	Array.wrap: (data) ->
+	Array.wrap = (data) ->
 		if $.isArray(data)
 			data
 		else
 			[data]
 	
-	Array::extract_options: ->
+	Array::extract_options = ->
 		if $.isPlainObject(this[@length - 1])
 			@pop()
 		else
 			{}
 	
-	Array::isEqual: (other) ->
+	Array::isEqual = (other) ->
 		return false unless $.isArray(other)
 		return false if @length != other.length
 		
@@ -34,55 +34,55 @@
 		
 		true
 	
-	String::simple_template_replace: (options) ->
-		text: this + ""
+	String::simple_template_replace = (options) ->
+		text = this + ""
 		
 		for key, replacement of options
-			text: text.replace("%{${key}}", replacement)
+			text = text.replace("%{#{key}}", replacement)
 		
 		text
 	
-	String::uc_first: ->
+	String::uc_first = ->
 		this.charAt(0).toUpperCase() + this.substr(1);
 	
-	String::camelize: ->
+	String::camelize = ->
 		parts = str.uc_first() for str in this.split("_")
 		parts.join('')
 	
-	$.isString: (value) -> (typeof value) == "string"
+	$.isString = (value) -> (typeof value) == "string"
 	
-	window.is_blank: (object) ->
+	window.is_blank = (object) ->
 		return true unless object?
 		return true if $.isString(object) and object.replace(/^\s+|\s+$/, '').length == 0
 		
 		false
 	
-	window.delete_object_property: (object, property) ->
-		value: object[property] || null
+	window.delete_object_property = (object, property) ->
+		value = object[property] || null
 		delete object[property]
 		value
 	
-	window.object_without_properties: (object, properties) ->
-		obj: $.extend({}, object)
+	window.object_without_properties = (object, properties) ->
+		obj = $.extend({}, object)
 		delete obj[property] for property in properties
 		obj
 	
-	window.extract_keys: (object) -> key for key of object
+	window.extract_keys = (object) -> key for key of object
 	
-	window.slice_object: (object, keys) ->
-		obj: {}
+	window.slice_object = (object, keys) ->
+		obj = {}
 		
 		for key in keys
-			obj[key]: object[key] if object[key]?
+			obj[key] = object[key] if object[key]?
 		
 		obj
 	
-	window.slice_object_and_remove: (object, keys) ->
-		obj: {}
+	window.slice_object_and_remove = (object, keys) ->
+		obj = {}
 		
 		for k, v of object
 			if $.inArray(k, keys) == -1
-				obj[k]: object[k]
+				obj[k] = object[k]
 				delete object[k]
 		
 		obj

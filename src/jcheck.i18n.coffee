@@ -18,16 +18,16 @@
 		
 		translate: (path, language) ->
 			language ?= $.FormCheck.i18n.default_language
-			steps: path.split(".")
+			steps = path.split(".")
 			steps.unshift(language)
 			
 			$.FormCheck.i18n.translation_from_path(steps)
 		
 		translation_from_path: (steps) ->
-			current: $.FormCheck.i18n.languages
+			current = $.FormCheck.i18n.languages
 			
 			for step in steps
-				current: current[step]
+				current = current[step]
 				return "" unless current?
 				
 			current

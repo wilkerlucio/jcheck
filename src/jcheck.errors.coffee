@@ -15,7 +15,7 @@
 (($) ->
 	class $.FormCheck.Errors
 		constructor: (form) ->
-			@form_checker: form
+			@form_checker = form
 			@clear()
 		
 		clear: ->
@@ -27,14 +27,14 @@
 			
 			@errors[field] ?= []
 			
-			message: options.message if options.message?
-			message: @generate_message(message, options)
-			message: message.simple_template_replace(options)
+			message = options.message if options.message?
+			message = @generate_message(message, options)
+			message = message.simple_template_replace(options)
 			
 			@errors[field].push(message)
 		
 		attributes_with_errors: ->
-			attributes: []
+			attributes = []
 			
 			for attribute, errors of @errors
 				attributes.push(attribute) if errors.length > 0
@@ -51,7 +51,7 @@
 					fn(attribute, error)
 		
 		size: ->
-			sum: 0
+			sum = 0
 			
 			for attribute, messages of @errors
 				sum += messages.length
@@ -59,17 +59,17 @@
 			sum
 		
 		full_messages: ->
-			messages: []
+			messages = []
 			
 			@each (attribute, message) =>
-				attribute: @form_checker.field(attribute).label()
-				messages.push("${attribute} ${message}")
+				attribute = @form_checker.field(attribute).label()
+				messages.push("#{attribute} #{message}")
 			
 			messages
 		
 		generate_message: (message) ->
-			if match: message.match /^:(.+)/
-				$.FormCheck.i18n.translate("errors.messages.${match[1]}", @form_checker.options.language)
+			if match = message.match /^:(.+)/
+				$.FormCheck.i18n.translate("errors.messages.#{match[1]}", @form_checker.options.language)
 			else
 				message
 )(jQuery)

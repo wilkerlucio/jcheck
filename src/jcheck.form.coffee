@@ -15,8 +15,8 @@
 (($) ->
 	class $.FormCheck
 		constructor: (form, options) ->
-			@form: form
-			@options: $.extend({
+			@form = form
+			@options = $.extend({
 				prevent_submit: true
 				field_prefix: null
 				notifiers: $.FormCheck.default_notifiers
@@ -24,9 +24,9 @@
 				language: $.FormCheck.default_locale
 			}, options || {})
 			
-			@field_cache: {}
-			@errors: new $.FormCheck.Errors(this)
-			@validations: []
+			@field_cache = {}
+			@errors = new $.FormCheck.Errors(this)
+			@validations = []
 			@hook_events()
 			@setup_notifiers()
 		
@@ -36,18 +36,18 @@
 					e.preventDefault() if @options.prevent_submit
 					notifier.notify() for notifier in @notifiers
 			
-			self: this
+			self = this
 			
 			@form.find(":input").each () ->
-				name: self.parse_field_name($(this))
+				name = self.parse_field_name($(this))
 				
 				if name
-					field: self.field(name)
+					field = self.field(name)
 					
 					if self.options.live_notifiers
 						((el) ->
-							n: name
-							f: field
+							n = name
+							f = field
 						
 							el.focus (e) ->
 								self.is_valid()
@@ -60,11 +60,11 @@
 					
 		
 		dispatch_live_notifiers: (callback, attribute, event, notifiers) ->
-			current_notifiers: []
+			current_notifiers = []
 			
 			for n in notifiers
 				if n == ":parent"
-					current_notifiers: current_notifiers.concat(@live_notifiers)
+					current_notifiers = current_notifiers.concat(@live_notifiers)
 				else
 					current_notifiers.push(@get_notifier(n))
 			
@@ -72,27 +72,27 @@
 		
 		setup_notifiers: ->
 			for type in ["notifiers", "live_notifiers"]
-				this[type]: []
-				this[type]: @get_notifier(kind) for kind in @options[type] if @options[type]
+				this[type] = []
+				this[type] = @get_notifier(kind) for kind in @options[type] if @options[type]
 		
 		get_notifier: (notifier) ->
-			parameters: [this]
+			parameters = [this]
 			
 			if $.isArray(notifier)
-				parameters: parameters.concat(notifier.slice(1))
-				notifier: notifier[0]
+				parameters = parameters.concat(notifier.slice(1))
+				notifier = notifier[0]
 			
 			if $.isString(notifier)
-				notifier_class: $.FormCheck.find_notifier(notifier)
+				notifier_class = $.FormCheck.find_notifier(notifier)
 					
-				creator: ->
+				creator = ->
 					notifier_class.apply(this, parameters)
 				
-				creator.prototype: notifier_class.prototype
+				creator.prototype = notifier_class.prototype
 				
 				new creator()
 			else
-				notifier.form: this
+				notifier.form = this
 				notifier
 		
 		validate: (validator) ->
@@ -111,17 +111,17 @@
 			@errors.size() == 0
 		
 		parse_field_name: (input) ->
-			name: input.attr("name")
+			name = input.attr("name")
 			return null unless name
 			
 			@reverse_field_name(name)
 		
 		reverse_field_name: (name) ->
 			if @options.field_prefix
-				if matches = name.match(new RegExp("${@options.field_prefix}\\[(.+?)\\](.*)"))
-					name: matches[1] + (matches[2] || "")
+				if matches = name.match(new RegExp("#{@options.field_prefix}\\[(.+?)\\](.*)"))
+					name = matches[1] + (matches[2] || "")
 				else
-					name: ":" + name
+					name = ":" + name
 			
 			name
 		
@@ -129,27 +129,27 @@
 			return matches[1] if matches = name.match(/^:(.+)/)
 			
 			if @options.field_prefix
-				subparts: ""
-				if matches: name.match(/(.+?)(\[.+)$/)
-					name: matches[1]
-					subparts: matches[2]
+				subparts = ""
+				if matches = name.match(/(.+?)(\[.+)$/)
+					name = matches[1]
+					subparts = matches[2]
 				
-				"${@options.field_prefix}[${name}]${subparts}"
+				"#{@options.field_prefix}[#{name}]#{subparts}"
 			else
 				name
 	
-	$.FormCheck.default_locale: "en"
-	$.FormCheck.default_notifiers: ["notification_dialog"]
-	$.FormCheck.default_live_notifiers: ["tip_balloons"]
+	$.FormCheck.default_locale = "en"
+	$.FormCheck.default_notifiers = ["notification_dialog"]
+	$.FormCheck.default_live_notifiers = ["tip_balloons"]
 	
 	class $.FormCheck.Field
 		constructor: (form, name, attribute) ->
-			@form_checker: form
-			@field_name: name
-			@attribute: attribute
-			@live_notifiers: [":parent"]
-			@element: @form_checker.form.find(":input[name='${name}']")
-			@custom_label: null
+			@form_checker = form
+			@field_name = name
+			@attribute = attribute
+			@live_notifiers = [":parent"]
+			@element = @form_checker.form.find(":input[name='#{name}']")
+			@custom_label = null
 			
 			if @form_checker.options.live_notifiers
 				for evt in @events_for_element()
@@ -192,12 +192,12 @@
 				else
 					return @custom_label
 			
-			field_id: @element.attr("id")
+			field_id = @element.attr("id")
 			
 			if @element.length > 1
-				field_id: matches[1] if matches = field_id.match(/(.+)_.+$/)
+				field_id = matches[1] if matches = field_id.match(/(.+)_.+$/)
 			
-			label_element: @form_checker.form.find("label[for='${field_id}']")
+			label_element = @form_checker.form.find("label[for='#{field_id}']")
 			
 			if label_element.length > 0
 				label_element.text()
@@ -205,6 +205,6 @@
 				@field_name
 	
 	# jquery hook
-	$.fn.jcheck: (options) ->
+	$.fn.jcheck = (options) ->
 		new $.FormCheck($(this), options || {})
 )(jQuery)
