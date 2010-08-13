@@ -107,6 +107,29 @@ describe 'jCheck'
 						v.should.have_error_message_on("is invalid", "text")
 					end
 				end
+				
+				describe 'pre-defined formats'
+					it "should parse correct urls"
+						v.validates_format_of("text", {"with": "url"})
+						
+						trues = ["http://www.site.com", "https://home.net/local/storage.html", "ftp://some.ftp.org", "http://site.info", "http://site.info/", "http://site.info/something", "http://site.com:8080/something_else"]
+						falses = ["www.site.com", "12://site.com", "http://openmind.com:abc/", "http://no_domain"]
+						
+						for (var i = 0; i < trues.length; i++) {
+							n = trues[i]
+
+							v.field("text").element.val(n)
+							v.should_not.have_errors_on("text")
+						}
+
+						for (var i = 0; i < falses.length; i++) {
+							n = falses[i]
+
+							v.field("text").element.val(n)
+							v.should.have_error_message_on("is invalid", "text")
+						}
+					end
+				end
 			end
 		
 			describe 'inclusion validator'
