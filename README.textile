@@ -21,7 +21,11 @@ h3. 0.7.0
 * Global configuration for default notifiers
 * URL format for format validator
 * Port source to Coffee Script 0.9
+
+h3. 0.8.0
+
 * Ajax validator
+* Use HTML 5 data attributes to define validations
 
 h3. 1.0
 
