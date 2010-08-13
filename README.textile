@@ -7,7 +7,7 @@ documentation for using it.
 h2. Developing
 
 jCheck is developed using "Coffee Script":http://jashkenas.github.com/coffee-script/
-version 0.7.2, so you need to install it in order to compile *Coffee Script*
+version 0.9.1, so you need to install it in order to compile *Coffee Script*
 sources.
 
 h2. Running specs
@@ -15,12 +15,6 @@ h2. Running specs
 To run specs just open the file @spec/dom.html@
 
 h2. Roadmap
-
-h3. 0.7.0
-
-* Global configuration for default notifiers
-* URL format for format validator
-* Port source to Coffee Script 0.9
 
 h3. 0.8.0
 
@@ -36,6 +30,13 @@ h3. 2.0
 * Framework independence
 
 h2. Changelog
+
+h3. 0.7.0
+
+* ported source to CoffeeScript 0.9
+* URL format for format validator
+* Now you can set a globally which will be the default notifiers
+* Fixed bug on notifier_dialog that makes crazy things when have many at same page
 
 h3. 0.6.0
 
