@@ -19,7 +19,6 @@ h2. Roadmap
 h3. 0.7.0
 
 * Global configuration for default notifiers
-
 * URL format for format validator
 * Port source to Coffee Script 0.9
 * Ajax validator
