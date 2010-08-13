@@ -16,12 +16,12 @@ To run specs just open the file @spec/dom.html@
 
 h2. Roadmap
 
-h3. 0.6.1
-
-* Port source to Coffee Script 0.9
-
 h3. 0.7.0
 
+* Global configuration for default notifiers
+
+* URL format for format validator
+* Port source to Coffee Script 0.9
 * Ajax validator
 
 h3. 1.0
