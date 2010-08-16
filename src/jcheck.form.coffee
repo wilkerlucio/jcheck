@@ -158,6 +158,8 @@
 						@form_checker.dispatch_live_notifiers("notify", @attribute, e, @live_notifiers)
 		
 		events_for_element: ->
+			return [] if @element.length == 0
+			
 			if @element.attr("type") == "radio" or @element.attr("type") == "checkbox"
 				return ["change"]
 			if @element[0].tagName.toLowerCase() == "select"

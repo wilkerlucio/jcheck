@@ -19,6 +19,7 @@
 				v.field("genre").custom_label = "Genre";
 				
 				with (v) {
+					validates_presence_of("invalid_field_inexistent");
 					validates(":off_context", "username", "message", "genre", {presence: true});
 					validates("country", {inclusion: ["Brazil", "USA"]})
 					validates("likes[]", {length: {minimum: 1, message: "need to select at least %{count}"}})
