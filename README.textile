@@ -31,6 +31,10 @@ h3. 2.0
 
 h2. Changelog
 
+h3. 0.7.1
+
+* ignore validations on fields that are not present in form
+
 h3. 0.7.0
 
 * ported source to CoffeeScript 0.9
