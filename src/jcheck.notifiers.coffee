@@ -127,17 +127,19 @@
 			element = if evt and evt.target then $(evt.target) else @form.element
 			offset = element.offset()
 			
+			populate_and_reposition = (messages) =>
+				@populate_dialog(dialog, messages)
+				dialog.css({top: "#{offset.top - dialog.outerHeight()}px", left: "#{offset.left + Math.round(element.outerWidth() * 0.9)}px"})
+			
 			if messages.length > 0
 				if dialog.messages and dialog.messages.length > 0
-					@populate_dialog(dialog, messages)
-					dialog.css({top: "#{offset.top - dialog.outerHeight()}px", left: "#{offset.left + Math.round(element.outerWidth() * 0.9)}px"})
+					populate_and_reposition(messages)
 				else
 					dialog.css({left: "-1000px", top: "-1000px"})
 					dialog.hide()
 				
-					@populate_dialog(dialog, messages)
-				
-					dialog.css({top: "#{offset.top - dialog.outerHeight()}px", left: "#{offset.left + Math.round(element.outerWidth() * 0.9)}px"})
+					populate_and_reposition(messages)
+					
 					dialog.fadeIn("fast")
 			else
 				@close_dialog(attribute)
