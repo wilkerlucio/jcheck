@@ -22,6 +22,7 @@
 				notifiers: $.FormCheck.default_notifiers
 				live_notifiers: $.FormCheck.default_live_notifiers
 				language: $.FormCheck.default_locale
+				auto_parse: true
 			}, options || {})
 			
 			@field_cache = {}
@@ -29,6 +30,24 @@
 			@validations = []
 			@hook_events()
 			@setup_notifiers()
+			@parse_inline_validations() if @options.auto_parse
+		
+		parse_inline_validations: ->
+			@form.find(":input[data-validations]").each (index, element) =>
+				e = $(element)
+				field_name = @parse_field_name(e)
+				validations = @parse_validation_string(e.attr("data-validations"))
+				@validates(field_name, validations)
+		
+		parse_validation_string: (validation_string) ->
+			validations = {}
+			
+			try
+				validations = eval("({#{validation_string}})")
+			catch e
+				console.error("can't parse \"#{validation_string}\"")
+			
+			validations
 		
 		hook_events: ->
 			@form.submit (e) =>
@@ -209,4 +228,8 @@
 	# jquery hook
 	$.fn.jcheck = (options) ->
 		new $.FormCheck($(this), options || {})
+	
+	# auto_parse
+	$ ->
+		$("form[data-jcheck=true]").jcheck()
 )(jQuery)

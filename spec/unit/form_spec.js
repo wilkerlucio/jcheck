@@ -153,6 +153,36 @@ describe "jCheck"
 					v.field("multiple_select").value().should.eql ["2", "4", "5"]
 				end
 			end
+			
+			describe "auto-parse"
+				describe "parsing validation strings"
+					it "should create the object with validations"
+						v = $("<form></form>").jcheck()
+						v.parse_validation_string("presence: true, format: /\\d+/").should.eql {presence: true, format: /\d+/}
+					end
+					
+					it "should return log error and return blank object if string is valid"
+						stub(console, 'error')
+						v = $("<form></form>").jcheck()
+						console.should.receive('error').with_args(an_instance_of(String))
+						v.parse_validation_string("presence: namaste").should.eql {}
+					end
+				end
+				
+				it "should parse fields with data-validation attribute"
+					v = $(fixture("form_inline_validations")).jcheck()
+					
+					v.should.have_error_message_on("can't be blank", "text")
+					v.should.have_error_message_on("can't be blank", "email")
+					v.should.have_error_message_on("is invalid", "email")
+				end
+				
+				it "should not parse fields if auto_parse option is sent as false"
+					v = $(fixture("form_inline_validations")).jcheck({auto_parse: false})
+					v.is_valid()
+					v.errors.size().should.be 0
+				end
+			end
 		end
 	end
 end
