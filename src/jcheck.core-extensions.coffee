@@ -86,4 +86,12 @@
 				delete object[k]
 		
 		obj
+	
+	# dummy console
+	unless window.console?
+		window.console = {
+			log: ->
+			dir: ->
+			error: ->
+		}
 )(jQuery)
