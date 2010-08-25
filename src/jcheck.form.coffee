@@ -14,8 +14,7 @@
 
 (($) ->
 	class $.FormCheck
-		constructor: (form, options) ->
-			@form = form
+		constructor: (@form, options) ->
 			@options = $.extend({
 				prevent_submit: true
 				field_prefix: null
