@@ -4,7 +4,7 @@
 #jcheck-error-dialog.ie-fixed { position: absolute; top: expression(document.compatMode == "CSS1Compat" ? document.documentElement.scrollTop + "px" : body.scrollTop + "px") }
 
 .jcheck-inline-balloon-tip { margin-left: -30px; margin-top: 3px; }
-.jcheck-inline-balloon-tip .content { background: #ee0101; border: 2px solid #000; padding: 2px 5px; border-radius: 8px; box-shadow: 0 0 6px #000; width: inherit; -moz-border-radius: 8px; -webkit-border-radius: 8px; -moz-box-shadow: 0 0 6px #000; -webkit-box-shadow: 0 0 6px #000; }
+.jcheck-inline-balloon-tip .content { background: #ee0101; border: 2px solid #000; padding: 2px 5px; border-radius: 8px; width: auto; float: none; box-shadow: 0 0 6px #000; -moz-border-radius: 8px; -webkit-border-radius: 8px; -moz-box-shadow: 0 0 6px #000; -webkit-box-shadow: 0 0 6px #000; }
 .jcheck-inline-balloon-tip ul { margin: 3px; list-style: none; padding: 0;}
 .jcheck-inline-balloon-tip li { margin: 0; padding: 0; color: #fff; font-size: 12px; font-family: Verdana; }
 .jcheck-inline-balloon-tip .arrow-container { margin-top: -2px; width: 19px; margin-left: 20px;}
