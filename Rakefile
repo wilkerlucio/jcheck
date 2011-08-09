@@ -5,7 +5,7 @@ require 'jsmin'
 require 'zip'
 
 def current_version
-  File.read("VERSION")
+  File.read("VERSION").strip
 end
 
 desc "Compile CoffeeScripts and watch for changes"
