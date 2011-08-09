@@ -46,7 +46,7 @@
     this.charAt(0).toUpperCase() + this.substr(1)
 
   String::camelize = ->
-    parts = str.uc_first() for str in this.split("_")
+    parts = (str.uc_first() for str in this.split("_"))
     parts.join('')
 
   $.isString = (value) -> (typeof value) == "string"
