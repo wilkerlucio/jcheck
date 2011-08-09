@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 require 'rubygems'
-require 'jsmin'
 require 'zip'
 
 def current_version
@@ -21,10 +20,20 @@ desc "Build minified version"
 task :build do
   modules = ["core-extensions", "form", "errors", "notifiers", "validations", "i18n"]
 
+  puts "Reading contents for packing..."
+
+  version = current_version
+  raw_path = "dist/jcheck-#{version}.js"
+  minified_path = "dist/jcheck-#{version}.min.js"
+
   content = modules.inject("") { |c, mod| c + File.read("lib/jcheck.#{mod}.js") }
   content << File.read("lib/locales/jcheck.en.js")
-  minyfied = JSMin.minify(content)
-  version = current_version
+
+  puts "Writing raw code into a file..."
+
+  File.open(raw_path, "wb") do |f|
+    f << content
+  end
 
   licence = <<LIC
 /**
@@ -44,10 +53,22 @@ task :build do
  */
 LIC
 
-  File.open("dist/jcheck-#{version}.min.js", "wb") do |f|
+  puts "Uglifying JS..."
+
+  minified = `uglifyjs #{raw_path}`
+
+  puts "Writing minified file..."
+
+  File.open(minified_path, "wb") do |f|
     f << licence
-    f << minyfied
+    f << minified
   end
+
+  puts "Removing raw file..."
+
+  File.unlink(raw_path)
+
+  puts "Build successful generated at: #{minified_path}"
 end
 
 desc "Build distribuition file"
