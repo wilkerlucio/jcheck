@@ -1,85 +1,85 @@
 <!DOCTYPE HTML>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<title>jCheck</title>
-		<link rel="stylesheet" type="text/css" href="../css/jcheck.css" />
-		<script type="text/javascript" src="../vendor/jquery.js"></script>
-		<script type="text/javascript" src="../lib/jcheck.core-extensions.js"></script>
-		<script type="text/javascript" src="../lib/jcheck.form.js"></script>
-		<script type="text/javascript" src="../lib/jcheck.errors.js"></script>
-		<script type="text/javascript" src="../lib/jcheck.notifiers.js"></script>
-		<script type="text/javascript" src="../lib/jcheck.validations.js"></script>
-		<script type="text/javascript" src="../lib/jcheck.i18n.js"></script>
-		<script type="text/javascript" src="../lib/locales/jcheck.en.js"></script>
-		<script type="text/javascript">
-			$(function() {
-				var v = $("form.comment").jcheck({field_prefix: "comment", notifiers: [["notification_dialog", {autoclose_in: 3000}]]});
-				v.field("likes[]").live_notifiers = [];
-				v.field("genre").custom_label = "Genre";
-				
-				with (v) {
-					validates_presence_of("invalid_field_inexistent");
-					validates(":off_context", "username", "message", "genre", {presence: true});
-					validates("country", {inclusion: ["Brazil", "USA"]})
-					validates("likes[]", {length: {minimum: 1, message: "need to select at least %{count}"}})
-					validates("email", {format: {"with": "email", message: "is not a valid e-mail"}});
-					validates_length_of("username", {minimum: 3, maximum: 10});
-					validates_numericality_of("number", {greater_than: 5, only_integer: true, allow_blank: true});
-					validates_each("username", "message", {callback: function(form, attribute, value) {
-						if (!(value.match(/^[A-Z]/))) {
-							form.errors.add(attribute, "need to start with an uppercase letter", this.options)
-						}
-					}});
-				}
-			});
-		</script>
-	</head>
-	<body>
-		<h2>Post your comment</h2>
-		<form action="" method="post" class="simple_form comment">
-			<div class="input string required">
-				<label class="string required" for="off_context">Off Context</label>
-				<input class="string required" id="off_context" maxlength="255" name="off_context" size="50" type="text" />
-			</div>
-			<div class="input string required">
-				<label class="string required" for="comment_username">Your name</label>
-				<input class="string required" id="comment_username" maxlength="255" name="comment[username]" size="50" type="text" />
-			</div>
-			<div class="input string required">
-				<label class="string required" for="comment_email">Your e-mail</label>
-				<input class="string required" id="comment_email" maxlength="255" name="comment[email]" size="50" type="text" />
-			</div>
-			<div class="input string required">
-				<label class="string required" for="comment_number">Some number</label>
-				<input class="string required" id="comment_number" maxlength="255" name="comment[number]" size="50" type="text" />
-			</div>
-			<div class="input string required">
-				<label class="string required" for="comment_message">Your comment</label>
-				<textarea id="comment_message" name="comment[message]" cols="30" rows="10"></textarea>
-			</div>
-			<div class="input string required">
-				<input id="comment_genre_male" name="comment[genre]" type="radio" value="male" />
-			  <label class="collection_radio" for="comment_genre_male">Male</label>
-				<input id="comment_genre_female" name="comment[genre]" type="radio" value="female" />
-			  <label class="collection_radio" for="comment_genre_female">Female</label>
-			</div>
-			<div class="input string required">
-				<label for="comment_likes" style="display:none;">Likes</label>
-				<input id="comment_likes_computer" name="comment[likes][]" type="checkbox" value="computer" />
-			  <label class="collection_radio" for="comment_likes_computer">Computer</label>
-				<input id="comment_likes_party" name="comment[likes][]" type="checkbox" value="party" />
-			  <label class="collection_radio" for="comment_likes_party">Party</label>
-			</div>
-			<div class="input string required">
-				<label class="string required" for="comment_country">Country</label>
-				<select name="comment[country]" id="comment_country">
-					<option value="">Select country</option>
-					<option value="Brazil">Brazil</option>
-					<option value="USA">USA</option>
-				</select>
-			</div>
-			<button type="submit">Send</button>
-		</form>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>jCheck</title>
+    <link rel="stylesheet" type="text/css" href="../css/jcheck.css" />
+    <script type="text/javascript" src="../vendor/jquery.js"></script>
+    <script type="text/javascript" src="../lib/jcheck.core-extensions.js"></script>
+    <script type="text/javascript" src="../lib/jcheck.form.js"></script>
+    <script type="text/javascript" src="../lib/jcheck.errors.js"></script>
+    <script type="text/javascript" src="../lib/jcheck.notifiers.js"></script>
+    <script type="text/javascript" src="../lib/jcheck.validations.js"></script>
+    <script type="text/javascript" src="../lib/jcheck.i18n.js"></script>
+    <script type="text/javascript" src="../lib/locales/jcheck.en.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        var v = $("form.comment").jcheck({field_prefix: "comment", notifiers: [["notification_dialog", {autoclose_in: 3000}]]});
+        v.field("likes[]").live_notifiers = [];
+        v.field("genre").custom_label = "Genre";
+        
+        with (v) {
+          validates_presence_of("invalid_field_inexistent");
+          validates(":off_context", "username", "message", "genre", {presence: true});
+          validates("country", {inclusion: ["Brazil", "USA"]})
+          validates("likes[]", {length: {minimum: 1, message: "need to select at least %{count}"}})
+          validates("email", {format: {"with": "email", message: "is not a valid e-mail"}});
+          validates_length_of("username", {minimum: 3, maximum: 10});
+          validates_numericality_of("number", {greater_than: 5, only_integer: true, allow_blank: true});
+          validates_each("username", "message", {callback: function(form, attribute, value) {
+            if (!(value.match(/^[A-Z]/))) {
+              form.errors.add(attribute, "need to start with an uppercase letter", this.options)
+            }
+          }});
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <h2>Post your comment</h2>
+    <form action="" method="post" class="simple_form comment">
+      <div class="input string required">
+        <label class="string required" for="off_context">Off Context</label>
+        <input class="string required" id="off_context" maxlength="255" name="off_context" size="50" type="text" />
+      </div>
+      <div class="input string required">
+        <label class="string required" for="comment_username">Your name</label>
+        <input class="string required" id="comment_username" maxlength="255" name="comment[username]" size="50" type="text" />
+      </div>
+      <div class="input string required">
+        <label class="string required" for="comment_email">Your e-mail</label>
+        <input class="string required" id="comment_email" maxlength="255" name="comment[email]" size="50" type="text" />
+      </div>
+      <div class="input string required">
+        <label class="string required" for="comment_number">Some number</label>
+        <input class="string required" id="comment_number" maxlength="255" name="comment[number]" size="50" type="text" />
+      </div>
+      <div class="input string required">
+        <label class="string required" for="comment_message">Your comment</label>
+        <textarea id="comment_message" name="comment[message]" cols="30" rows="10"></textarea>
+      </div>
+      <div class="input string required">
+        <input id="comment_genre_male" name="comment[genre]" type="radio" value="male" />
+        <label class="collection_radio" for="comment_genre_male">Male</label>
+        <input id="comment_genre_female" name="comment[genre]" type="radio" value="female" />
+        <label class="collection_radio" for="comment_genre_female">Female</label>
+      </div>
+      <div class="input string required">
+        <label for="comment_likes" style="display:none;">Likes</label>
+        <input id="comment_likes_computer" name="comment[likes][]" type="checkbox" value="computer" />
+        <label class="collection_radio" for="comment_likes_computer">Computer</label>
+        <input id="comment_likes_party" name="comment[likes][]" type="checkbox" value="party" />
+        <label class="collection_radio" for="comment_likes_party">Party</label>
+      </div>
+      <div class="input string required">
+        <label class="string required" for="comment_country">Country</label>
+        <select name="comment[country]" id="comment_country">
+          <option value="">Select country</option>
+          <option value="Brazil">Brazil</option>
+          <option value="USA">USA</option>
+        </select>
+      </div>
+      <button type="submit">Send</button>
+    </form>
+  </body>
 </html>

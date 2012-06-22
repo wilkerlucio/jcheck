@@ -1,11 +1,11 @@
 # Copyright (c) 2010 Wilker Lúcio <wilkerlucio@gmail.com>
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #    http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -13,25 +13,25 @@
 # limitations under the License.
 
 (($) ->
-	$.FormCheck.i18n = {
-		default_language: "en"
-		
-		translate: (path, language) ->
-			language ?= $.FormCheck.i18n.default_language
-			steps = path.split(".")
-			steps.unshift(language)
-			
-			$.FormCheck.i18n.translation_from_path(steps)
-		
-		translation_from_path: (steps) ->
-			current = $.FormCheck.i18n.languages
-			
-			for step in steps
-				current = current[step]
-				return "" unless current?
-				
-			current
-		
-		languages: {}
-	}
+  $.FormCheck.i18n = {
+    default_language: "en"
+
+    translate: (path, language) ->
+      language ?= $.FormCheck.i18n.default_language
+      steps = path.split(".")
+      steps.unshift(language)
+
+      $.FormCheck.i18n.translation_from_path(steps)
+
+    translation_from_path: (steps) ->
+      current = $.FormCheck.i18n.languages
+
+      for step in steps
+        current = current[step]
+        return "" unless current?
+
+      current
+
+    languages: {}
+  }
 )(jQuery)
