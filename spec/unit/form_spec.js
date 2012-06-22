@@ -36,6 +36,20 @@ describe "jCheck"
       it "should be valid if has no errors"
         v.is_valid().should.be_true
       end
+
+      it "should trigger notifiers if asked to"
+        v.notifiers = [{notify: function() {}}]
+        v.validate(function(f) {f.errors.add("text", "some")})
+        v.notifiers[0].should.receive("notify")
+        v.is_valid(true)
+      end
+
+      it "should not trigger notifiers if not asked to"
+        v.notifiers = [{notify: function() {}}]
+        v.validate(function(f) {f.errors.add("text", "some")})
+        v.notifiers[0].should_not.receive("notify")
+        v.is_valid(false)
+      end
     end
 
     describe "notifiers setup"

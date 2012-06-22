@@ -122,13 +122,18 @@
       @field_cache[name] ?= new $.FormCheck.Field(this, @field_name(name), name)
       @field_cache[name]
 
-    is_valid: ->
+    is_valid: (triggerNotifiers = false) ->
       @errors.clear()
 
       for validation in @validations
         validation(this)
 
-      @errors.size() == 0
+      valid = @errors.size() == 0
+
+      if triggerNotifiers and !valid
+        notifier.notify() for notifier in @notifiers
+
+      valid
 
     parse_field_name: (input) ->
       name = input.attr("name")
