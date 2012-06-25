@@ -14,16 +14,16 @@
 
 (($) ->
   $.FormCheck.i18n = {
-    default_language: "en"
+    defaultLanguage: "en"
 
     translate: (path, language) ->
-      language ?= $.FormCheck.i18n.default_language
+      language ?= $.FormCheck.i18n.defaultLanguage
       steps = path.split(".")
       steps.unshift(language)
 
-      $.FormCheck.i18n.translation_from_path(steps)
+      $.FormCheck.i18n.translationFromPath(steps)
 
-    translation_from_path: (steps) ->
+    translationFromPath: (steps) ->
       current = $.FormCheck.i18n.languages
 
       for step in steps

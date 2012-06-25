@@ -9,14 +9,14 @@ describe "jCheck"
       end
 
       it "should not run jcheck if it is disabled"
-        v.should_not.receive("is_valid")
+        v.should_not.receive("isValid")
 
         form.submit()
       end
 
       it "should run jcheck if it is re-enabled"
         v.enable()
-        v.should.receive("is_valid")
+        v.should.receive("isValid")
 
         form.submit()
       end
@@ -30,69 +30,69 @@ describe "jCheck"
 
       it "should don't be valid if has errors"
         v.validate(function(f) {f.errors.add("text", "some")})
-        v.is_valid().should.be_false
+        v.isValid().should.be_false
       end
 
       it "should be valid if has no errors"
-        v.is_valid().should.be_true
+        v.isValid().should.be_true
       end
 
       it "should trigger notifiers if asked to"
         v.notifiers = [{notify: function() {}}]
         v.validate(function(f) {f.errors.add("text", "some")})
         v.notifiers[0].should.receive("notify")
-        v.is_valid(true)
+        v.isValid(true)
       end
 
       it "should not trigger notifiers if not asked to"
         v.notifiers = [{notify: function() {}}]
         v.validate(function(f) {f.errors.add("text", "some")})
         v.notifiers[0].should_not.receive("notify")
-        v.is_valid(false)
+        v.isValid(false)
       end
     end
 
     describe "notifiers setup"
-      it "should user notification_dialog and tip_ballons as default notifiers"
+      it "should user notificationDialog and tipBallons as default notifiers"
         v = $(fixture("form")).jcheck()
         v.options.should.have 1, 'notifiers'
-        v.options.should.have 1, 'live_notifiers'
+        v.options.should.have 1, 'liveNotifiers'
       end
 
       it "should be able to customize overall notifiers on creation"
         v = $(fixture("form")).jcheck({notifiers: []})
         v.options.should.have 0, 'notifiers'
-        v.options.should.have 1, 'live_notifiers'
+        v.options.should.have 1, 'liveNotifiers'
       end
 
       it "should be able to customize live notifiers on creation"
-        v = $(fixture("form")).jcheck({live_notifiers: []})
+        v = $(fixture("form")).jcheck({liveNotifiers: []})
         v.options.should.have 1, 'notifiers'
-        v.options.should.have 0, 'live_notifiers'
+        v.options.should.have 0, 'liveNotifiers'
       end
 
       it "should be able to customize both kind notifiers at once"
-        v = $(fixture("form")).jcheck({notifiers: [], live_notifiers: []})
+        v = $(fixture("form")).jcheck({notifiers: [], liveNotifiers: []})
         v.options.should.have 0, 'notifiers'
-        v.options.should.have 0, 'live_notifiers'
+        v.options.should.have 0, 'liveNotifiers'
       end
 
       it "should be able to customize default overall notifiers"
-        jQuery.FormCheck.default_notifiers = []
+        jQuery.FormCheck.defaultNotifiers = []
 
         v = $(fixture("form")).jcheck()
         v.options.should.have 0, 'notifiers'
 
-        jQuery.FormCheck.default_notifiers = ["notification_dialog"]
+        jQuery.FormCheck.defaultNotifiers = ["notificationDialog"]
       end
 
       it "should be able to customize default live notifiers"
-        jQuery.FormCheck.default_live_notifiers = []
+        jQuery.FormCheck.defaultLiveNotifiers = []
 
         v = $(fixture("form")).jcheck()
-        v.options.should.have 0, 'live_notifiers'
+        v.options.should.have 0, 'liveNotifiers'
 
-        jQuery.FormCheck.default_live_notifiers = ["tip_balloons"]
+        jQuery.FormCheck.defaultLiveNotifiers = ["tipBalloons"]
       end
     end
 
@@ -115,14 +115,14 @@ describe "jCheck"
         end
 
         it "should able to use custom label"
-          v.field("text").custom_label = "Custom Label"
+          v.field("text").customLabel = "Custom Label"
           v.field("text").label().should.eql "Custom Label"
         end
       end
 
-      describe "field_prefix"
+      describe "fieldPrefix"
         before_each
-          v = $(fixture("form")).jcheck({field_prefix: "user"})
+          v = $(fixture("form")).jcheck({fieldPrefix: "user"})
         end
 
         it "should get prefixed field"
@@ -134,17 +134,17 @@ describe "jCheck"
         end
 
         it "should generate field name correctly"
-          v.field_name("something").should.eql "user[something]"
-          v.field_name("list[]").should.eql "user[list][]"
-          v.field_name("more[deept][things][here]").should.eql "user[more][deept][things][here]"
-          v.field_name(":raw_name").should.eql "raw_name"
+          v.fieldName("something").should.eql "user[something]"
+          v.fieldName("list[]").should.eql "user[list][]"
+          v.fieldName("more[deept][things][here]").should.eql "user[more][deept][things][here]"
+          v.fieldName(":raw_name").should.eql "raw_name"
         end
 
         it "should reverse field name correctly"
-          v.reverse_field_name("user[something]").should.eql "something"
-          v.reverse_field_name("user[list][]").should.eql "list[]"
-          v.reverse_field_name("user[more][deept][things][here]").should.eql "more[deept][things][here]"
-          v.reverse_field_name("raw_name").should.eql ":raw_name"
+          v.reverseFieldName("user[something]").should.eql "something"
+          v.reverseFieldName("user[list][]").should.eql "list[]"
+          v.reverseFieldName("user[more][deept][things][here]").should.eql "more[deept][things][here]"
+          v.reverseFieldName("raw_name").should.eql ":raw_name"
         end
       end
 
@@ -190,28 +190,28 @@ describe "jCheck"
         describe "parsing validation strings"
           it "should create the object with validations"
             v = $("<form></form>").jcheck()
-            v.parse_validation_string("presence: true, format: /\\d+/").should.eql {presence: true, format: /\d+/}
+            v.parseValidationString("presence: true, format: /\\d+/").should.eql {presence: true, format: /\d+/}
           end
 
           it "should return log error and return blank object if string is valid"
             stub(console, 'error')
             v = $("<form></form>").jcheck()
             console.should.receive('error').with_args(an_instance_of(String))
-            v.parse_validation_string("presence: namaste").should.eql {}
+            v.parseValidationString("presence: namaste").should.eql {}
           end
         end
 
         it "should parse fields with data-validation attribute"
           v = $(fixture("form_inline_validations")).jcheck()
 
-          v.should.have_error_message_on("can't be blank", "text")
-          v.should.have_error_message_on("can't be blank", "email")
-          v.should.have_error_message_on("is invalid", "email")
+          v.should.haveErrorMessageOn("can't be blank", "text")
+          v.should.haveErrorMessageOn("can't be blank", "email")
+          v.should.haveErrorMessageOn("is invalid", "email")
         end
 
-        it "should not parse fields if auto_parse option is sent as false"
-          v = $(fixture("form_inline_validations")).jcheck({auto_parse: false})
-          v.is_valid()
+        it "should not parse fields if auto parse option is sent as false"
+          v = $(fixture("form_inline_validations")).jcheck({autoParse: false})
+          v.isValid()
           v.errors.size().should.be 0
         end
       end

@@ -24,7 +24,7 @@
     }, object || {})
 
     base ?= $.FormCheck.Notifiers.Base
-    class_name = name.camelize() + "Notifier"
+    className = name.camelize() + "Notifier"
 
     class notifier extends base
       constructor: -> super; @constructor.apply(this, arguments)
@@ -33,11 +33,11 @@
 
     notifier.kind = name
 
-    $.FormCheck.Notifiers[class_name] = notifier
+    $.FormCheck.Notifiers[className] = notifier
 
     notifier
 
-  $.FormCheck.find_notifier = (kind) ->
+  $.FormCheck.findNotifier = (kind) ->
     for name, notifier of $.FormCheck.Notifiers
       return notifier if notifier.kind == kind
 
@@ -50,7 +50,7 @@
     blur: (attribute) ->
 
   class $.FormCheck.Notifiers.DialogBase extends $.FormCheck.Notifiers.Base
-    populate_dialog: (dialog, messages) ->
+    populateDialog: (dialog, messages) ->
       html = "<ul>"
       for m in messages
         html += "<li>* #{m}</li>"
@@ -62,53 +62,53 @@
     constructor: (form, options) ->
       super form
       @options = $.extend({
-        autoclose_in: 4000
+        autocloseIn: 4000
       }, options || {})
 
     notify: () ->
-      dialog = @generate_dialog()
+      dialog = @generateDialog()
       dialog.css({left: "-1000px"})
-      @populate_dialog(dialog, @form.errors.full_messages())
+      @populateDialog(dialog, @form.errors.fullMessages())
       dialog.css({"margin-top": "-#{dialog.outerHeight() + 10}px", left: "50%", "margin-left": "-#{Math.round(dialog.outerWidth() / 2)}px"})
       dialog.show()
       dialog.animate({"margin-top": "0px"})
       dialog.mouseout()
 
-    close_dialog: ->
-      @current_dialog.animate({"margin-top": "-#{@current_dialog.outerHeight() + 10}px"}, { complete: -> $(this).hide() })
+    closeDialog: ->
+      @currentDialog.animate({"margin-top": "-#{@currentDialog.outerHeight() + 10}px"}, { complete: -> $(this).hide() })
 
-    generate_dialog: () ->
-      clearTimeout($.FormCheck.Notifiers.NotificationDialog.dialog_timer) if $.FormCheck.Notifiers.NotificationDialog.dialog_timer
-      dialog_id = "jcheck-error-dialog"
+    generateDialog: () ->
+      clearTimeout($.FormCheck.Notifiers.NotificationDialog.dialogTimer) if $.FormCheck.Notifiers.NotificationDialog.dialogTimer
+      dialogId = "jcheck-error-dialog"
 
-      $("##{dialog_id}").remove()
+      $("##{dialogId}").remove()
 
       dialog = $(document.createElement("div"))
-      dialog.attr("id", dialog_id)
+      dialog.attr("id", dialogId)
 
-      @current_dialog = dialog
+      @currentDialog = dialog
 
       dialog.addClass("ie-fixed") if $.browser.msie and parseInt($.browser.version) < 7
 
       dialog.click =>
-        @close_dialog()
+        @closeDialog()
 
-      if @options.autoclose_in
+      if @options.autocloseIn
         dialog.mouseover =>
-          clearTimeout($.FormCheck.Notifiers.NotificationDialog.dialog_timer) if $.FormCheck.Notifiers.NotificationDialog.dialog_timer
+          clearTimeout($.FormCheck.Notifiers.NotificationDialog.dialogTimer) if $.FormCheck.Notifiers.NotificationDialog.dialogTimer
 
         dialog.mouseout =>
           self = this
           callback = () ->
-            self.close_dialog()
-          $.FormCheck.Notifiers.NotificationDialog.dialog_timer = setTimeout(callback, @options.autoclose_in)
+            self.closeDialog()
+          $.FormCheck.Notifiers.NotificationDialog.dialogTimer = setTimeout(callback, @options.autocloseIn)
 
       $(document.body).append(dialog)
 
       dialog
 
-  $.FormCheck.Notifiers.NotificationDialog.dialog_timer = 0
-  $.FormCheck.Notifiers.NotificationDialog.kind = "notification_dialog"
+  $.FormCheck.Notifiers.NotificationDialog.dialogTimer = 0
+  $.FormCheck.Notifiers.NotificationDialog.kind = "notificationDialog"
 
   class $.FormCheck.Notifiers.TipBalloons extends $.FormCheck.Notifiers.DialogBase
     constructor: (form) ->
@@ -119,7 +119,7 @@
       @notify(attribute, evt || null)
 
     notify: (attribute, evt) ->
-      dialog = @dialog_for_attribute(attribute)
+      dialog = @dialogForAttribute(attribute)
       messages = @form.errors.on(attribute)
 
       return if messages.isEqual(dialog.messages)
@@ -127,61 +127,61 @@
       element = if evt and evt.target then $(evt.target) else @form.element
       offset = element.offset()
 
-      populate_and_reposition = (messages) =>
-        @populate_dialog(dialog, messages)
+      populateAndReposition = (messages) =>
+        @populateDialog(dialog, messages)
         dialog.css({top: "#{offset.top - dialog.outerHeight()}px", left: "#{offset.left + Math.round(element.outerWidth() * 0.9)}px"})
 
       if messages.length > 0
         if dialog.messages and dialog.messages.length > 0
-          populate_and_reposition(messages)
+          populateAndReposition(messages)
         else
           dialog.css({left: "-1000px", top: "-1000px"})
           dialog.hide()
 
-          populate_and_reposition(messages)
+          populateAndReposition(messages)
 
           dialog.fadeIn("fast")
       else
-        @close_dialog(attribute)
+        @closeDialog(attribute)
 
       dialog.messages = messages
 
     blur: (attribute) ->
-      @close_dialog(attribute)
+      @closeDialog(attribute)
 
-    dialog_for_attribute: (attribute) ->
-      @balloons[attribute] = @generate_dialog() unless @balloons[attribute]
+    dialogForAttribute: (attribute) ->
+      @balloons[attribute] = @generateDialog() unless @balloons[attribute]
       @balloons[attribute]
 
-    close_dialog: (attribute) ->
-      dialog = @dialog_for_attribute(attribute)
+    closeDialog: (attribute) ->
+      dialog = @dialogForAttribute(attribute)
       dialog.messages = null
       dialog.fadeOut("fast")
 
-    generate_dialog: () ->
+    generateDialog: () ->
       dialog = null
 
       dialog = $(document.createElement("div"))
       dialog.addClass("jcheck-inline-balloon-tip")
       dialog.css({position: "absolute", top: "-1000px", left: "-1000px"})
 
-      content_area = $(document.createElement("div"))
-      content_area.addClass("content")
-      dialog.append(content_area)
+      contentArea = $(document.createElement("div"))
+      contentArea.addClass("content")
+      dialog.append(contentArea)
 
-      arrow = @generate_arrow()
+      arrow = @generateArrow()
       dialog.append(arrow)
 
       $(document.body).append(dialog)
 
       dialog
 
-    generate_arrow: () ->
+    generateArrow: () ->
       i = 10
       container = $(document.createElement("div"))
       container.addClass("arrow-container")
       center = i / 2
-      max_width = null
+      maxWidth = null
 
       while i > 0
         x = i * 2 - center
@@ -196,8 +196,8 @@
 
       container
 
-    populate_dialog: (dialog, messages) ->
+    populateDialog: (dialog, messages) ->
       super dialog.find(".content"), messages
 
-  $.FormCheck.Notifiers.TipBalloons.kind = "tip_balloons"
+  $.FormCheck.Notifiers.TipBalloons.kind = "tipBalloons"
 )(jQuery)

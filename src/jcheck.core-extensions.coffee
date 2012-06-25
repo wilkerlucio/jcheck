@@ -19,7 +19,7 @@
     else
       [data]
 
-  Array::extract_options = ->
+  Array::extractOptions = ->
     if $.isPlainObject(this[@length - 1])
       @pop()
     else
@@ -34,7 +34,7 @@
 
     true
 
-  String::simple_template_replace = (options) ->
+  String::simpleTemplateReplace = (options) ->
     text = this + ""
 
     for key, replacement of options
@@ -42,34 +42,39 @@
 
     text
 
-  String::uc_first = ->
+  String::ucFirst = ->
     this.charAt(0).toUpperCase() + this.substr(1)
 
   String::camelize = ->
-    parts = (str.uc_first() for str in this.split("_"))
+    parts = (str.ucFirst() for str in this.split("_"))
     parts.join('')
+
+  String::snakeCase = ->
+    str = this.replace(/([A-Z]+)([A-Z][a-z])/g, "$1_$2")
+    str = str.replace(/([a-z\d])([A-Z])/g, "$1_$2")
+    str.toLowerCase()
 
   $.isString = (value) -> (typeof value) == "string"
 
-  window.is_blank = (object) ->
+  window.isBlank = (object) ->
     return true unless object?
     return true if $.isString(object) and object.replace(/^\s+|\s+$/, '').length == 0
 
     false
 
-  window.delete_object_property = (object, property) ->
+  window.deleteObjectProperty = (object, property) ->
     value = object[property] || null
     delete object[property]
     value
 
-  window.object_without_properties = (object, properties) ->
+  window.objectWithoutProperties = (object, properties) ->
     obj = $.extend({}, object)
     delete obj[property] for property in properties
     obj
 
-  window.extract_keys = (object) -> key for key of object
+  window.extractKeys = (object) -> key for key of object
 
-  window.slice_object = (object, keys) ->
+  window.sliceObject = (object, keys) ->
     obj = {}
 
     for key in keys
@@ -77,7 +82,7 @@
 
     obj
 
-  window.slice_object_and_remove = (object, keys) ->
+  window.sliceObjectAndRemove = (object, keys) ->
     obj = {}
 
     for k, v of object

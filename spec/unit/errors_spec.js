@@ -1,7 +1,7 @@
 describe "jCheck"
   describe "Errors"
     before_each
-      form_stub = {
+      formStub = {
         options: {
           language: "en"
         },
@@ -15,7 +15,7 @@ describe "jCheck"
         }
       }
 
-      error = new jQuery.FormCheck.Errors(form_stub)
+      error = new jQuery.FormCheck.Errors(formStub)
     end
 
     it "should add new errors"
@@ -74,11 +74,11 @@ describe "jCheck"
       end
 
       it "should return a list with fields with errors"
-        error.attributes_with_errors().should.eql ["name", "other", "more"]
+        error.attributesWithErrors().should.eql ["name", "other", "more"]
       end
 
       it "should generate a list with all errors with field names"
-        error.full_messages().should.eql ["name some", "name something", "other something", "more something"]
+        error.fullMessages().should.eql ["name some", "name something", "other something", "more something"]
       end
     end
   end

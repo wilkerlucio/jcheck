@@ -1,14 +1,14 @@
 JSpec.addMatchers({
-  have_errors_on: {
+  haveErrorsOn: {
     match: function(formcheck, field) {
-      formcheck.is_valid();
+      formcheck.isValid();
       return (formcheck.errors.on(field).length > 0);
     }
   },
 
-  have_error_message_on: {
+  haveErrorMessageOn: {
     match: function(formcheck, message, field) {
-      formcheck.is_valid();
+      formcheck.isValid();
       return (jQuery.inArray(message, formcheck.errors.on(field)) >= 0);
     },
 
