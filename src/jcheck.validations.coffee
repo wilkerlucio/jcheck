@@ -56,16 +56,15 @@
     $.extend(options, {attributes: attributes})
 
   # create validator helper
-  $.FormCheck.Validator.create = (name, object, base) ->
+  $.FormCheck.Validator.create = (name, object = {}, base = $.FormCheck.EachValidator) ->
     object = $.extend({
-      constructor: ->
+      initializer: -> base::constructor.apply(this, arguments),
+      baseClass: base
     }, object || {})
 
-    base ?= $.FormCheck.EachValidator
     className = name.camelize() + "Validator"
-
     class validator extends base
-      constructor: -> super; @constructor.apply(this, arguments)
+      constructor: -> @initializer.apply(this, arguments)
 
     $.extend(validator.prototype, object)
 
@@ -74,7 +73,7 @@
     $.FormCheck.Validations[className] = validator
 
     # TODO: fix it
-    $.FormCheck.prototype["validates#{name}Of"] = (attributes...) ->
+    $.FormCheck.prototype["validates#{name.camelize()}Of"] = (attributes...) ->
       @validatesWith(validator, @attributesForWith(attributes))
 
     validator
@@ -101,53 +100,38 @@
   ##################################
   # acceptance validator
   ##################################
-  class $.FormCheck.Validations.AcceptanceValidator extends $.FormCheck.EachValidator
-    constructor: (options) ->
-      super $.extend({accept: '1'}, options)
+  $.FormCheck.Validator.create "acceptance",
+    initializer: (options) ->
+      @baseClass::constructor.call(this, $.extend({accept: '1'}, options))
 
     validateEach: (form, attribute, value) ->
       form.errors.add(attribute, ":accepted", objectWithoutProperties(@options, ['accept', 'allowNil'])) unless value == @options.accept
 
-  $.FormCheck.Validations.AcceptanceValidator.kind = "acceptance"
-
-  $.FormCheck::validatesAcceptanceOf = (attributes...) ->
-    @validatesWith($.FormCheck.Validations.AcceptanceValidator, @attributesForWith(attributes))
-
   ##################################
   # confirmation validator
   ##################################
-  class $.FormCheck.Validations.ConfirmationValidator extends $.FormCheck.EachValidator
+  $.FormCheck.Validator.create "confirmation",
     validateEach: (form, attribute, value) ->
       confirmedFieldName = attribute + "_confirmation"
       confirmed = form.field(confirmedFieldName).value()
       form.errors.add(confirmedFieldName, ":confirmation", @options) unless value == confirmed
 
-  $.FormCheck.Validations.ConfirmationValidator.kind = "confirmation"
-
-  $.FormCheck::validatesConfirmationOf = (attributes...) ->
-    @validatesWith($.FormCheck.Validations.ConfirmationValidator, @attributesForWith(attributes))
-
   ##################################
   # exclusion validator
   ##################################
-  class $.FormCheck.Validations.ExclusionValidator extends $.FormCheck.EachValidator
+  $.FormCheck.Validator.create "exclusion",
     validateEach: (form, attribute, value) ->
       form.errors.add(attribute, ":exclusion", $.extend(objectWithoutProperties(@options, ['in']), {value: value})) if $.inArray(value, @options["in"]) > -1
-
-  $.FormCheck.Validations.ExclusionValidator.kind = "exclusion"
-
-  $.FormCheck::validatesExclusionOf = (attributes...) ->
-    @validatesWith($.FormCheck.Validations.ExclusionValidator, @attributesForWith(attributes))
 
   ##################################
   # format validator
   ##################################
-  class $.FormCheck.Validations.FormatValidator extends $.FormCheck.EachValidator
-    constructor: (options) ->
+  $.FormCheck.Validator.create "format",
+    initializer: (options) ->
       for opt in ["with", "without"]
         options[opt] = $.FormCheck.Validations.FormatValidator.FORMATS[options[opt]] if options[opt]? and $.isString(options[opt])
 
-      super options
+      @baseClass::constructor.call(this, options)
 
     validateEach: (form, attribute, value) ->
       if @options["with"] and !((value + "").match(@options["with"]))
@@ -155,33 +139,23 @@
       if @options["without"] and (value + "").match(@options["without"])
         form.errors.add(attribute, ":invalid", $.extend(objectWithoutProperties(@options, ['without']), {value: value}))
 
-  $.FormCheck.Validations.FormatValidator.FORMATS = {
+  $.FormCheck.Validations.FormatValidator.FORMATS =
     email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
     url: /^[A-Za-z]+:\/\/[A-Za-z0-9-_]+(\.[a-zA-Z0-9]+)+(:\d+)?[A-Za-z0-9-_%&\?\/.=]+$/
-  }
-  $.FormCheck.Validations.FormatValidator.kind = "format"
-
-  $.FormCheck::validatesFormatOf = (attributes...) ->
-    @validatesWith($.FormCheck.Validations.FormatValidator, @attributesForWith(attributes))
 
   ##################################
   # inclusion validator
   ##################################
-  class $.FormCheck.Validations.InclusionValidator extends $.FormCheck.EachValidator
+  $.FormCheck.Validator.create "inclusion",
     validateEach: (form, attribute, value) ->
       form.errors.add(attribute, ":inclusion", $.extend(objectWithoutProperties(@options, ['in']), {value: value})) if $.inArray(value, @options["in"]) == -1
-
-  $.FormCheck.Validations.InclusionValidator.kind = "inclusion"
-
-  $.FormCheck::validatesInclusionOf = (attributes...) ->
-    @validatesWith($.FormCheck.Validations.InclusionValidator, @attributesForWith(attributes))
 
   ##################################
   # length validator
   ##################################
-  class $.FormCheck.Validations.LengthValidator extends $.FormCheck.EachValidator
-    constructor: (options) ->
-      super $.extend({tokenizer: $.FormCheck.Validations.LengthValidator.DEFAULT_TOKENIZER}, options)
+  $.FormCheck.Validator.create "length",
+    initializer: (options) ->
+      @baseClass::.constructor.call(this, $.extend({tokenizer: $.FormCheck.Validations.LengthValidator.DEFAULT_TOKENIZER}, options))
 
     validateEach: (form, attribute, value) ->
       value = @options.tokenizer(value) if $.isString(value)
@@ -200,15 +174,11 @@
 
   $.FormCheck.Validations.LengthValidator.DEFAULT_TOKENIZER = (value) -> value.split ''
   $.FormCheck.Validations.LengthValidator.RESERVED_OPTIONS = ["minimum", "maximum", "is", "tokenizer", "tooLong", "tooShort"]
-  $.FormCheck.Validations.LengthValidator.kind = "length"
-
-  $.FormCheck::validatesLengthOf = (attributes...) ->
-    @validatesWith($.FormCheck.Validations.LengthValidator, @attributesForWith(attributes))
 
   ##################################
   # numericality validator
   ##################################
-  class $.FormCheck.Validations.NumericalityValidator extends $.FormCheck.EachValidator
+  $.FormCheck.Validator.create "numericality",
     validateEach: (form, attribute, value) ->
       rawValue = value
       value = parseFloat(value)
@@ -225,7 +195,6 @@
 
       for check, val of sliceObject(@options, extractKeys($.FormCheck.Validations.NumericalityValidator.CHECKS))
         switch check
-          # TODO: convert label i18n id to snake case
           when "odd", "even"
             form.errors.add(attribute, ":" + check, @filteredOptions(val)) unless $.FormCheck.Validations.NumericalityValidator.CHECKS[check](value)
           else
@@ -245,22 +214,13 @@
   }
 
   $.FormCheck.Validations.NumericalityValidator.RESERVED_OPTIONS = extractKeys($.FormCheck.Validations.NumericalityValidator.CHECKS).concat(["onlyInteger"])
-  $.FormCheck.Validations.NumericalityValidator.kind = "numericality"
-
-  $.FormCheck::validatesNumericalityOf = (attributes...) ->
-    @validatesWith($.FormCheck.Validations.NumericalityValidator, @attributesForWith(attributes))
 
   ##################################
   # presence validator
   ##################################
-  class $.FormCheck.Validations.PresenceValidator extends $.FormCheck.EachValidator
+  $.FormCheck.Validator.create "presence",
     validateEach: (form, attribute, value) ->
       form.errors.add(attribute, ":blank", @options) if isBlank(value)
-
-  $.FormCheck.Validations.PresenceValidator.kind = 'presence'
-
-  $.FormCheck::validatesPresenceOf = (attributes...) ->
-    @validatesWith($.FormCheck.Validations.PresenceValidator, @attributesForWith(attributes))
 
   ##################################
   # validates
