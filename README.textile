@@ -1,5 +1,7 @@
 h1. jCheck
 
+bq. This project is no longer being maintened, I'm working on a new validation framework that I highly recommend you to use instead of jCheck: "composed validations":https://github.com/composed-validations/composed-validations
+
 jCheck provides an easy way to create full customized validations for your javascript. You should check our "site":http://jcheck.net for demos and full documentation for using it.
 Using Rails 3? You really should checkout our "jCheck Rails":http://github.com/wilkerlucio/jcheck_rails project!
 
